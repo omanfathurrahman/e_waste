@@ -1,0 +1,28 @@
+name: e_waste
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.9
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/home.svg
+    - assets/icons/buang.svg
+    - assets/icons/profile.svg
+    - assets/icons/service.svg
+    - assets/icons/donasi.svg
+    - assets/images/143035475_1029718927553677_5869815052519506947_n 1.png
+  
