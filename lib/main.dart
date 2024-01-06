@@ -1,3 +1,4 @@
+import 'package:e_waste/screen/buang_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screen/home_screen.dart';
@@ -12,7 +13,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Home(),
+      home: BuangScreen(),
     );
   }
 }

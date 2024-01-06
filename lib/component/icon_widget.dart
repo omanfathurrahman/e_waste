@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IconWidget extends StatelessWidget {
-  const IconWidget(this._assetName,
-      {super.key, this.color = Colors.grey, this.panjang = 18});
+  const IconWidget(
+    this._assetName, {
+    super.key,
+    this.color = Colors.grey,
+    this.panjang = 18,
+  });
   final String _assetName;
   final Color color;
   final double panjang;

@@ -1,54 +1,31 @@
 import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/component/navbar_widget.dart';
+import 'package:e_waste/layout/default.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          // width: 319,
-          // height: 537,
-          width: double.infinity,
-          height: double.infinity,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(0.00, 1.00),
-              end: Alignment(0, -1),
-              colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
-            ),
-          ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-            child: ListView(
-              children: const [
-                Komponen1(),
-                SizedBox(height: 20),
-                Komponen2(),
-                SizedBox(height: 20),
-                Komponen3(),
-                SizedBox(height: 20),
-                Komponen4(),
-                SizedBox(height: 20),
-                Komponen5(),
-              ],
-            ),
-          ),
-          bottomNavigationBar: const Navbar(),
-        ),
-      ],
+    return DefaultLayout(
+      child: ListView(
+        children: const [
+          Komponen1(),
+          SizedBox(height: 20),
+          Komponen2(),
+          SizedBox(height: 20),
+          Komponen3(),
+          SizedBox(height: 20),
+          Komponen4(),
+          SizedBox(height: 20),
+          Komponen5(),
+        ],
+      ),
     );
   }
 }
@@ -67,8 +44,10 @@ class Komponen1 extends StatelessWidget {
               "assets/images/143035475_1029718927553677_5869815052519506947_n 1.png",
             ),
             const SizedBox(width: 10),
-            const Text("John Mayer",
-                style: TextStyle(fontSize: 20, color: Colors.white))
+            const Text(
+              "John Mayer",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            )
           ],
         ),
         ClipOval(
@@ -78,7 +57,7 @@ class Komponen1 extends StatelessWidget {
               splashColor: Colors.deepPurple[400], // Splash color
               onTap: () {},
               child: const SizedBox(
-                  width: 40, height: 40, child: Icon(Icons.menu)),
+                  width: 40, height: 40, child: IconWidget("notification")),
             ),
           ),
         )
