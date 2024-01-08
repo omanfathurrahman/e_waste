@@ -1,6 +1,9 @@
+import 'package:e_waste/component/grid_jenis_elektronik.dart';
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/layout/default.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BuangScreen extends StatelessWidget {
   const BuangScreen({super.key});
@@ -10,19 +13,19 @@ class BuangScreen extends StatelessWidget {
     return DefaultLayout(
       child: ListView(
         children: [
-          const Komponen1(),
+          const KomponenHeader(),
           const SizedBox(height: 16),
-          const Komponen2(),
+          const KomponenCari(),
           const SizedBox(height: 16),
-          Komponen3(),
+          KomponenJenisElektronik(),
         ],
       ),
     );
   }
 }
 
-class Komponen1 extends StatelessWidget {
-  const Komponen1({super.key});
+class KomponenHeader extends StatelessWidget {
+  const KomponenHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +60,8 @@ class Komponen1 extends StatelessWidget {
   }
 }
 
-class Komponen2 extends StatelessWidget {
-  const Komponen2({super.key});
+class KomponenCari extends StatelessWidget {
+  const KomponenCari({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,70 +81,127 @@ class Komponen2 extends StatelessWidget {
   }
 }
 
-class Komponen3 extends StatelessWidget {
-  Komponen3({super.key});
-  final List<Map<String, String>> data = [
-    {
-      "nama": "Laptop",
-      "gambar": "laptop",
-    },
-    {
-      "nama": "Smartphone",
-      "gambar": "smartphone",
-    },
-    {
-      "nama": "Printer",
-      "gambar": "printer",
-    },
-    {
-      "nama": "Kulkas",
-      "gambar": "kulkas",
-    },
-    {
-      "nama": "Televisi",
-      "gambar": "televisi",
-    },
-    {
-      "nama": "Lainnya",
-      "gambar": "lainnya",
-    },
-  ];
+class KomponenJenisElektronik extends StatelessWidget {
+  KomponenJenisElektronik({super.key});
+  // final List<Map<String, String>> data = [
+  //   {
+  //     "nama": "Laptop",
+  //     "gambar": "laptop",
+  //   },
+  //   {
+  //     "nama": "Smartphone",
+  //     "gambar": "smartphone",
+  //   },
+  //   {
+  //     "nama": "Printer",
+  //     "gambar": "printer",
+  //   },
+  //   {
+  //     "nama": "Kulkas",
+  //     "gambar": "kulkas",
+  //   },
+  //   {
+  //     "nama": "Televisi",
+  //     "gambar": "televisi",
+  //   },
+  //   {
+  //     "nama": "Lainnya",
+  //     "gambar": "lainnya",
+  //   },
+  //   {
+  //     "nama": "Smartphone",
+  //     "gambar": "smartphone",
+  //   },
+  //   {
+  //     "nama": "Printer",
+  //     "gambar": "printer",
+  //   },
+  //   {
+  //     "nama": "Kulkas",
+  //     "gambar": "kulkas",
+  //   },
+  //   {
+  //     "nama": "Televisi",
+  //     "gambar": "televisi",
+  //   },
+  //   {
+  //     "nama": "Lainnya",
+  //     "gambar": "lainnya",
+  //   },
+  //   {
+  //     "nama": "Printer",
+  //     "gambar": "printer",
+  //   },
+  //   {
+  //     "nama": "Kulkas",
+  //     "gambar": "kulkas",
+  //   },
+  //   {
+  //     "nama": "Televisi",
+  //     "gambar": "televisi",
+  //   },
+  //   {
+  //     "nama": "Lainnya",
+  //     "gambar": "lainnya",
+  //   },
+  // ];
+
+  final _jenisElektronik =
+      Supabase.instance.client.from('jenis_elektronik').select();
+
+  Future<Widget> getSvg(String fileName) async {
+    final response = await Supabase.instance.client.storage
+        .from('jenis_elektronik')
+        .download('$fileName.svg');
+
+    final String svgString = String.fromCharCodes(response);
+    return SvgPicture.string(
+      svgString,
+      height: 30,
+      width: 30,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      const Text("Jenis Elektronik"),
-      const SizedBox(height: 10),
-      ColoredBox(
-        color: Colors.white,
-        child: SizedBox(
-          height: 500,
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: RadialGradient(colors: [
-                Color.fromARGB(255, 248, 104, 104),
-                Color.fromARGB(255, 217, 24, 24),
-              ], radius: 0.85, focal: Alignment.center),
-            ),
-            child: GridView(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-                crossAxisCount: 3,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Jenis Elektronik",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
+          child: SizedBox(
+            height: 440,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: RadialGradient(colors: [
+                    Color.fromARGB(255, 155, 155, 155),
+                    Color.fromARGB(255, 204, 204, 204),
+                  ], radius: 0.85, focal: Alignment.center),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(1.8),
+                  child: GridJenisElektronik(
+                    listJenisEletronik: _jenisElektronik,
+                  ),
+                ),
               ),
-              children: <Widget>[
-                Container(color: Colors.white54),
-                Container(color: Colors.white54),
-                Container(color: Colors.white54),
-                Container(color: Colors.white54),
-                Container(color: Colors.white54),
-                Container(color: Colors.white54),
-              ],
             ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
