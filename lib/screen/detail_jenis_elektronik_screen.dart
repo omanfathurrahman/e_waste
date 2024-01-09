@@ -61,7 +61,7 @@ class _DetailJenisElektronikScreenState
                 "pilihan" => <Widget>[
                     const KomponenHeader(),
                     const SizedBox(height: 16),
-                    const KomponenDropdown(),
+                    KomponenDropdown(idJenisKategori: widget.idJenisKategori),
                     const SizedBox(height: 16),
                     KomponenJumlahBarang(jumlahController: jumlahController),
                     const SizedBox(height: 16),
@@ -70,7 +70,7 @@ class _DetailJenisElektronikScreenState
                 "pilihan + kecil_sedang_besar" => <Widget>[
                     const KomponenHeader(),
                     const SizedBox(height: 16),
-                    const KomponenDropdown(),
+                    KomponenDropdown(idJenisKategori: widget.idJenisKategori),
                     const SizedBox(height: 16),
                     KomponenUkuranBarang(
                         idJenisKategori: widget.idJenisKategori),
@@ -170,42 +170,42 @@ class KomponenUkuranBarang extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Card(
                       child: ColoredBox(
                         color: Colors.white,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "Sedang",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(height: 10),
-                              Text("1kg - 15kg"),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['sedang_label']),
                             ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Card(
                       child: ColoredBox(
                         color: Colors.white,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "Besar",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(height: 10),
-                              Text("1kg - 15kg"),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['besar_label']),
                             ],
                           ),
                         ),
@@ -267,7 +267,8 @@ class KomponenTombol extends StatelessWidget {
 }
 
 class KomponenDropdown extends StatefulWidget {
-  const KomponenDropdown({super.key});
+  const KomponenDropdown({super.key, required this.idJenisKategori});
+  final int idJenisKategori;
 
   @override
   State<KomponenDropdown> createState() => _KomponenDropdownState();
@@ -275,11 +276,10 @@ class KomponenDropdown extends StatefulWidget {
 
 class _KomponenDropdownState extends State<KomponenDropdown> {
   final List<String> kategori = ["Kecil", "Sedang", "Besar"];
-  String pilihanKategori = "";
+  late String pilihanKategori;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pilihanKategori = kategori.first;
   }
@@ -296,28 +296,34 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
         const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
-          child: DropdownButton<String>(
-            hint: const Text(
-              "Pilih Kategori",
-              style: TextStyle(color: Colors.white),
-            ),
-            iconEnabledColor: Colors.white,
-            dropdownColor: const Color.fromARGB(219, 94, 145, 255),
-            focusColor: Colors.transparent,
-            items: kategori
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(color: Colors.white),
+          child: FutureBuilder(
+            future: kategorisasiPilihan(id: widget.idJenisKategori),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final pilihan = snapshot.data;
+              return DropdownButton<String>(
+
+                iconEnabledColor: Colors.white,
+                dropdownColor: const Color.fromARGB(219, 94, 145, 255),
+                focusColor: Colors.transparent,
+                items: pilihan!
+                    .map(
+                      (item) => DropdownMenuItem<String>(
+                        // value: item['berat'].toString(),
+                        child: Text(item['label'],
+                            style: const TextStyle(color: Colors.white)),
                       ),
-                    ))
-                .toList(),
-            // value: pilihanKategori,
-            onChanged: (String? value) {
-              setState(
-                () {
-                  pilihanKategori = value!;
+                    )
+                    .toList(),
+                value: pilihanKategori,
+                onChanged: (String? value) {
+                  setState(
+                    () {
+                      pilihanKategori = value!;
+                    },
+                  );
                 },
               );
             },
@@ -331,7 +337,17 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
 Future<List<Map<String, dynamic>>> kategorisasiKSB({required int id}) async {
   final response = await Supabase.instance.client
       .from('kategorisasi_kecilsedangbesar')
-      .select('*')
+      .select()
+      .eq('id_jenis_elektronik', id);
+  return response;
+}
+
+Future<List<Map<String, dynamic>>> kategorisasiPilihan(
+    {required int id}) async {
+  print(id);
+  final response = await Supabase.instance.client
+      .from('kategorisasi_pilihan')
+      .select()
       .eq('id_jenis_elektronik', id);
   return response;
 }
