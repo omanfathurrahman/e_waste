@@ -1,6 +1,5 @@
 import 'package:e_waste/component/grid_jenis_elektronik.dart';
 import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/layout/default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -10,16 +9,14 @@ class BuangScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      child: ListView(
-        children: [
-          const KomponenHeader(),
-          const SizedBox(height: 16),
-          const KomponenCari(),
-          const SizedBox(height: 16),
-          KomponenJenisElektronik(),
-        ],
-      ),
+    return ListView(
+      children: [
+        const KomponenHeader(),
+        const SizedBox(height: 16),
+        const KomponenCari(),
+        const SizedBox(height: 16),
+        KomponenJenisElektronik(),
+      ],
     );
   }
 }
@@ -146,8 +143,10 @@ class KomponenJenisElektronik extends StatelessWidget {
   //   },
   // ];
 
-  final _jenisElektronik =
-      Supabase.instance.client.from('jenis_elektronik').select();
+  final _jenisElektronik = Supabase.instance.client
+      .from('jenis_elektronik')
+      .select()
+      .order("id", ascending: true);
 
   Future<Widget> getSvg(String fileName) async {
     final response = await Supabase.instance.client.storage

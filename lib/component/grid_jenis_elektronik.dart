@@ -1,3 +1,4 @@
+import 'package:e_waste/screen/detail_jenis_elektronik_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -5,7 +6,7 @@ import 'get_svg_widget.dart';
 
 class GridJenisElektronik extends StatelessWidget {
   const GridJenisElektronik({super.key, required this.listJenisEletronik});
-  final PostgrestFilterBuilder<List<Map<String, dynamic>>> listJenisEletronik;
+  final PostgrestTransformBuilder<List<Map<String, dynamic>>> listJenisEletronik;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,17 @@ class GridJenisElektronik extends StatelessWidget {
               final item = jenisBarangElektronik?[index];
               return InkWell(
                 splashColor: Colors.deepPurple[400],
-                onTap: () => {print(item?['id'])},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailJenisElektronikScreen(
+                        jenisKategorisasi: item?['kategorisasi'],
+                        idJenisKategori: item?['id'],
+                      ),
+                    ),
+                  );
+                },
                 child: ColoredBox(
                   color: Colors.white,
                   child: Column(

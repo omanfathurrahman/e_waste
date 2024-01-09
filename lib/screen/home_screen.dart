@@ -1,5 +1,4 @@
 import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/layout/default.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,20 +11,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      child: ListView(
-        children: const [
-          Komponen1(),
-          SizedBox(height: 20),
-          Komponen2(),
-          SizedBox(height: 20),
-          Komponen3(),
-          SizedBox(height: 20),
-          Komponen4(),
-          SizedBox(height: 20),
-          Komponen5(),
-        ],
-      ),
+    return ListView(
+      children: const [
+        Komponen1(),
+        SizedBox(height: 20),
+        Komponen2(),
+        SizedBox(height: 20),
+        Komponen3(),
+        SizedBox(height: 20),
+        Komponen4(),
+        SizedBox(height: 20),
+        Komponen5(),
+      ],
     );
   }
 }

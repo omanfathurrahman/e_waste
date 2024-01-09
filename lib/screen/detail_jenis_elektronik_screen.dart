@@ -1,14 +1,14 @@
-import 'dart:ffi';
-
-import 'package:e_waste/component/grid_jenis_elektronik.dart';
-import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/layout/default.dart';
+import 'package:e_waste/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailJenisElektronikScreen extends StatefulWidget {
-  const DetailJenisElektronikScreen({super.key});
+  const DetailJenisElektronikScreen(
+      {super.key,
+      required this.jenisKategorisasi,
+      required this.idJenisKategori});
+  final String jenisKategorisasi;
+  final int idJenisKategori;
 
   @override
   State<DetailJenisElektronikScreen> createState() =>
@@ -21,20 +21,70 @@ class _DetailJenisElektronikScreenState
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      child: ListView(
-        children: [
-          const KomponenHeader(),
-          const SizedBox(height: 16),
-          const KomponenDropdown(),
-          const SizedBox(height: 16),
-          const KomponenUkuranBarang(),
-          const SizedBox(height: 16),
-          KomponenJumlahBarang(jumlahController: jumlahController),
-          const SizedBox(height: 16),
-          const KomponenTombol(),
-        ],
-      ),
+    return MaterialApp(
+      home: Stack(children: [
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          clipBehavior: Clip.antiAlias,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(0.00, 1.00),
+              end: Alignment(0, -1),
+              colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
+            ),
+          ),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+            child: ListView(
+              children: switch (widget.jenisKategorisasi) {
+                "none" => <Widget>[
+                    const KomponenHeader(),
+                    const SizedBox(height: 16),
+                    KomponenJumlahBarang(jumlahController: jumlahController),
+                    const SizedBox(height: 16),
+                    const KomponenTombol(),
+                  ],
+                "kecil_sedang_besar" => <Widget>[
+                    const KomponenHeader(),
+                    const SizedBox(height: 16),
+                    KomponenUkuranBarang(
+                        idJenisKategori: widget.idJenisKategori),
+                    const SizedBox(height: 16),
+                    KomponenJumlahBarang(jumlahController: jumlahController),
+                    const SizedBox(height: 16),
+                    const KomponenTombol(),
+                  ],
+                "pilihan" => <Widget>[
+                    const KomponenHeader(),
+                    const SizedBox(height: 16),
+                    const KomponenDropdown(),
+                    const SizedBox(height: 16),
+                    KomponenJumlahBarang(jumlahController: jumlahController),
+                    const SizedBox(height: 16),
+                    const KomponenTombol(),
+                  ],
+                "pilihan + kecil_sedang_besar" => <Widget>[
+                    const KomponenHeader(),
+                    const SizedBox(height: 16),
+                    const KomponenDropdown(),
+                    const SizedBox(height: 16),
+                    KomponenUkuranBarang(
+                        idJenisKategori: widget.idJenisKategori),
+                    const SizedBox(height: 16),
+                    KomponenJumlahBarang(jumlahController: jumlahController),
+                    const SizedBox(height: 16),
+                    const KomponenTombol(),
+                  ],
+                _ => []
+              },
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }
@@ -44,7 +94,7 @@ class KomponenHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         // IconButton(
         //   onPressed: () => {},
@@ -52,9 +102,13 @@ class KomponenHeader extends StatelessWidget {
         //   color: Colors.white,
         // ),
         BackButton(
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MainLayout()));
+          },
           color: Colors.white,
         ),
-        Text(
+        const Text(
           "Buang Sampah Elektronik",
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
@@ -64,8 +118,8 @@ class KomponenHeader extends StatelessWidget {
 }
 
 class KomponenUkuranBarang extends StatelessWidget {
-  const KomponenUkuranBarang({super.key});
-
+  const KomponenUkuranBarang({super.key, required this.idJenisKategori});
+  final int idJenisKategori;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -84,76 +138,85 @@ class KomponenUkuranBarang extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
           ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Card(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Kecil",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
+          child: FutureBuilder(
+            future: kategorisasiKSB(id: idJenisKategori),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final kategoriKecilSedangBesar = snapshot.data?[0];
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Kecil",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['kecil_label']),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text("1kg - 15kg"),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Card(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Sedang",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
+                  const Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Sedang",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(height: 10),
+                              Text("1kg - 15kg"),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text("1kg - 15kg"),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Card(
-                  child: ColoredBox(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Besar",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
+                  const Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Besar",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(height: 10),
+                              Text("1kg - 15kg"),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text("1kg - 15kg"),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
-        )
+        ),
       ],
     );
   }
@@ -263,4 +326,12 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
       ],
     );
   }
+}
+
+Future<List<Map<String, dynamic>>> kategorisasiKSB({required int id}) async {
+  final response = await Supabase.instance.client
+      .from('kategorisasi_kecilsedangbesar')
+      .select('*')
+      .eq('id_jenis_elektronik', id);
+  return response;
 }
