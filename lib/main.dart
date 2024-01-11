@@ -1,6 +1,7 @@
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
 import 'package:e_waste/screen/buang_screen.dart';
+import 'package:e_waste/screen/donasi_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -51,9 +52,7 @@ int _selectedIndex = 0;
 List<Widget> _screenOption = <Widget>[
   const HomeScreen(),
   const BuangScreen(),
-  const Text(
-    'Index 2: Donasi',
-  ),
+  const DonasiScreen(),
   const Text(
     'Index 3: Service',
   ),
