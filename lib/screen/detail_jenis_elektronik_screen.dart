@@ -51,7 +51,7 @@ class _DetailJenisElektronikScreenState
                 "kecil_sedang_besar" => <Widget>[
                     const KomponenHeader(),
                     const SizedBox(height: 16),
-                    KomponenUkuranBarang(
+                    KomponenUkuranBarang2(
                         idJenisKategori: widget.idJenisKategori),
                     const SizedBox(height: 16),
                     KomponenJumlahBarang(jumlahController: jumlahController),
@@ -72,7 +72,7 @@ class _DetailJenisElektronikScreenState
                     const SizedBox(height: 16),
                     KomponenDropdown(idJenisKategori: widget.idJenisKategori),
                     const SizedBox(height: 16),
-                    KomponenUkuranBarang(
+                    KomponenUkuranBarang2(
                         idJenisKategori: widget.idJenisKategori),
                     const SizedBox(height: 16),
                     KomponenJumlahBarang(jumlahController: jumlahController),
@@ -119,6 +119,111 @@ class KomponenHeader extends StatelessWidget {
 
 class KomponenUkuranBarang extends StatelessWidget {
   const KomponenUkuranBarang({super.key, required this.idJenisKategori});
+  final int idJenisKategori;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Ukuran Barang",
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
+          child: FutureBuilder(
+            future: kategorisasiKSB(id: idJenisKategori),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final kategoriKecilSedangBesar = snapshot.data?[0];
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Kecil",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['kecil_label']),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Sedang",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['sedang_label']),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      child: ColoredBox(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Column(
+                            children: [
+                              const Text(
+                                "Besar",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(kategoriKecilSedangBesar?['besar_label']),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class KomponenUkuranBarang2 extends StatelessWidget {
+  const KomponenUkuranBarang2({super.key, required this.idJenisKategori});
   final int idJenisKategori;
   @override
   Widget build(BuildContext context) {
@@ -286,6 +391,7 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    var _width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -295,7 +401,7 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          width: double.infinity,
+          width: _width,
           child: FutureBuilder(
             future: kategorisasiPilihan(id: widget.idJenisKategori),
             builder: (context, snapshot) {
@@ -303,28 +409,25 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
                 return const Center(child: CircularProgressIndicator());
               }
               final pilihan = snapshot.data;
-              return DropdownButton<String>(
-
-                iconEnabledColor: Colors.white,
-                dropdownColor: const Color.fromARGB(219, 94, 145, 255),
-                focusColor: Colors.transparent,
-                items: pilihan!
+              return DropdownMenu(
+                textStyle: const TextStyle(color: Colors.white),
+                inputDecorationTheme: const InputDecorationTheme(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1, color: Colors.white),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1, color: Colors.white),
+                  ),
+                ),
+                initialSelection: pilihan?[0]['berat'],
+                dropdownMenuEntries: pilihan!
                     .map(
-                      (item) => DropdownMenuItem<String>(
-                        // value: item['berat'].toString(),
-                        child: Text(item['label'],
-                            style: const TextStyle(color: Colors.white)),
+                      (item) => DropdownMenuEntry(
+                        value: item['berat'],
+                        label: item['label'],
                       ),
                     )
                     .toList(),
-                value: pilihanKategori,
-                onChanged: (String? value) {
-                  setState(
-                    () {
-                      pilihanKategori = value!;
-                    },
-                  );
-                },
               );
             },
           ),

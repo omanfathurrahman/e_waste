@@ -13,13 +13,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ListView(
       children: const [
-        Komponen1(),
+        KomponenHeader(),
         SizedBox(height: 20),
-        Komponen2(),
+        KomponenPoin(),
         SizedBox(height: 20),
-        Komponen3(),
+        KomponenNavigasi(),
         SizedBox(height: 20),
-        Komponen4(),
+        KomponenIklan(),
         SizedBox(height: 20),
         Komponen5(),
       ],
@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class Komponen1 extends StatelessWidget {
-  const Komponen1({super.key});
+class KomponenHeader extends StatelessWidget {
+  const KomponenHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +63,8 @@ class Komponen1 extends StatelessWidget {
   }
 }
 
-class Komponen2 extends StatelessWidget {
-  const Komponen2({super.key});
+class KomponenPoin extends StatelessWidget {
+  const KomponenPoin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -114,8 +114,8 @@ class Komponen2 extends StatelessWidget {
   }
 }
 
-class Komponen3 extends StatelessWidget {
-  const Komponen3({super.key});
+class KomponenNavigasi extends StatelessWidget {
+  const KomponenNavigasi({super.key});
 
   Widget container({
     required String icon,
@@ -169,6 +169,19 @@ class Komponen3 extends StatelessWidget {
               child: Material(
                 color: const Color(0xFFF2F2F2), // Button color
                 child: InkWell(
+                  onTapUp: (details) {
+                    switch (icon){
+                      case "buang":
+                        // Navigator.pushNamed(context, '/buang');
+                        break;
+                      case "donasi":
+                        // Navigator.pushNamed(context, '/donasi');
+                        break;
+                      case "service":
+                        // Navigator.pushNamed(context, '/service');
+                        break;
+                    }
+                  },
                   splashColor: Colors.deepPurple[400], // Splash color
                   onTap: () {},
                   child: const SizedBox(
@@ -209,8 +222,8 @@ class Komponen3 extends StatelessWidget {
   }
 }
 
-class Komponen4 extends StatelessWidget {
-  const Komponen4({super.key});
+class KomponenIklan extends StatelessWidget {
+  const KomponenIklan({super.key});
 
   @override
   Widget build(BuildContext context) {
