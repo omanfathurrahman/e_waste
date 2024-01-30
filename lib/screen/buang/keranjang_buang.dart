@@ -255,6 +255,17 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                                 style: TextStyle(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
+                        FutureBuilder(
+                            future: getTotalBerat(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              final totalBerat = snapshot.data!;
+                              return Text(
+                                  "Jumlah poin yang akan anda dapatkan: ${totalBerat.toString()}");
+                            }),
                         const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
@@ -299,5 +310,16 @@ Future<num> hitungBeratKeseluruhan(
     beratKeseluruhan += item['jumlah'] * beratSementara;
   }
   return beratKeseluruhan;
-  // return keranjangBuang;
+}
+
+Future<num> getTotalBerat() async {
+  final keranjangBuang = await Supabase.instance.client
+      .from("keranjang_buang")
+      .select()
+      .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+  num beratKeseluruhan = 0;
+  for (var item in keranjangBuang) {
+    beratKeseluruhan += item['jumlah'];
+  }
+  return beratKeseluruhan;
 }

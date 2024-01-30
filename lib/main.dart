@@ -1,6 +1,5 @@
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
-import 'package:e_waste/screen/auth/login_screen.dart';
 import 'package:e_waste/screen/buang/buang_screen.dart';
 import 'package:e_waste/screen/donasi/donasi_screen.dart';
 import 'package:e_waste/screen/profile/profile_screen.dart';
