@@ -1,12 +1,19 @@
-import 'package:e_waste/screen/detail_jenis_elektronik_screen.dart';
+import 'package:e_waste/screen/buang/detail_buang_jenis_elektronik_screen.dart';
+import 'package:e_waste/screen/donasi/detail_donasi_jenis_elektronik_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'get_svg_widget.dart';
 
 class GridJenisElektronik extends StatelessWidget {
-  const GridJenisElektronik({super.key, required this.listJenisEletronik});
-  final PostgrestTransformBuilder<List<Map<String, dynamic>>> listJenisEletronik;
+  const GridJenisElektronik({
+    super.key,
+    required this.listJenisEletronik,
+    required this.tipe,
+  });
+  final PostgrestTransformBuilder<List<Map<String, dynamic>>>
+      listJenisEletronik;
+  final String tipe;
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +40,31 @@ class GridJenisElektronik extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailJenisElektronikScreen(
-                        jenisKategorisasi: item?['kategorisasi'],
-                        idJenisKategori: item?['id'],
-                      ),
+                      builder: (context) => (tipe == "buang")
+                          ? DetailBuangJenisElektronikScreen(
+                              jenisKategorisasi: item?['kategorisasi'],
+                              idJenisKategori: item?['id'],
+                            )
+                          : DetailDonasiJenisElektronikScreen(
+                              jenisKategorisasi: item?['kategorisasi'],
+                              idJenisKategori: item?['id']),
                     ),
                   );
                 },
                 child: ColoredBox(
                   color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GetSvgWidget(fileName: item?["jenis"]),
-                      Text(item?["jenis"]),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GetSvgWidget(fileName: item?["jenis"]),
+                        Text(
+                          item?["jenis"],
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

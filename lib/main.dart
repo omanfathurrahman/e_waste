@@ -1,12 +1,15 @@
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
-import 'package:e_waste/screen/buang_screen.dart';
-import 'package:e_waste/screen/donasi_screen.dart';
-import 'package:e_waste/screen/service_screen.dart';
+import 'package:e_waste/screen/auth/login_screen.dart';
+import 'package:e_waste/screen/buang/buang_screen.dart';
+import 'package:e_waste/screen/donasi/donasi_screen.dart';
+import 'package:e_waste/screen/profile/profile_screen.dart';
+import 'package:e_waste/screen/service/service_screen.dart';
+import 'package:e_waste/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'screen/home_screen.dart';
+import 'screen/home/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +28,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      // home: DetailJenisElektronikScreen(),
-      home: MainLayout(),
+      home: SplashScreen(),
     );
   }
 }
@@ -48,28 +50,40 @@ List<NavigationDestination> navbarItem = NavbarOption.values
     )
     .toList();
 
-int _selectedIndex = 0;
-
-List<Widget> _screenOption = <Widget>[
-  const HomeScreen(),
-  const BuangScreen(),
-  const DonasiScreen(),
-  const ServiceScreen(),
-  const Text(
-    'Index 4: Profile',
-  ),
-];
-
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
-
+  const MainLayout({super.key, this.curScreenIndex = 0});
+  final int curScreenIndex;
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
+  late int selectedIndex;
+
+  void gantiScreen(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    selectedIndex = widget.curScreenIndex;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screenOption = <Widget>[
+      HomeScreen(
+        gantiScreen: gantiScreen,
+      ),
+      const BuangScreen(),
+      const DonasiScreen(),
+      const ServiceScreen(),
+      const ProfileScreen(),
+    ];
+
     return Stack(
       children: [
         Container(
@@ -88,14 +102,14 @@ class _MainLayoutState extends State<MainLayout> {
           backgroundColor: Colors.transparent,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-            child: _screenOption[_selectedIndex],
+            child: screenOption[selectedIndex],
           ),
           bottomNavigationBar: NavigationBar(
             destinations: navbarItem,
-            selectedIndex: _selectedIndex,
+            selectedIndex: selectedIndex,
             onDestinationSelected: (int value) {
               setState(() {
-                _selectedIndex = value;
+                selectedIndex = value;
               });
             },
           ),

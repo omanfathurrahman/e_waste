@@ -1,11 +1,12 @@
 import 'package:e_waste/component/grid_jenis_elektronik.dart';
 import 'package:e_waste/component/icon_widget.dart';
+import 'package:e_waste/screen/donasi/keranjang_donasi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class BuangScreen extends StatelessWidget {
-  const BuangScreen({super.key});
+class DonasiScreen extends StatelessWidget {
+  const DonasiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class KomponenHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          "Buang Sampah Elektronik",
+          "Donasi Sampah Elektronik",
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
         ClipOval(
@@ -38,7 +39,11 @@ class KomponenHeader extends StatelessWidget {
             color: Colors.white, // Button color
             child: InkWell(
               splashColor: Colors.deepPurple[400], // Splash color
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const KeranjangDonasi();
+                }));
+              },
               child: const SizedBox(
                   width: 40,
                   height: 40,
@@ -71,7 +76,7 @@ class KomponenCari extends StatelessWidget {
           prefixIcon: Icon(Icons.search),
           contentPadding: EdgeInsets.symmetric(horizontal: 10),
           border: OutlineInputBorder(),
-          hintText: 'Cari jenis sampah',
+          hintText: 'Cari jenis barang',
         ),
       ),
     );
@@ -80,68 +85,6 @@ class KomponenCari extends StatelessWidget {
 
 class KomponenJenisElektronik extends StatelessWidget {
   KomponenJenisElektronik({super.key});
-  // final List<Map<String, String>> data = [
-  //   {
-  //     "nama": "Laptop",
-  //     "gambar": "laptop",
-  //   },
-  //   {
-  //     "nama": "Smartphone",
-  //     "gambar": "smartphone",
-  //   },
-  //   {
-  //     "nama": "Printer",
-  //     "gambar": "printer",
-  //   },
-  //   {
-  //     "nama": "Kulkas",
-  //     "gambar": "kulkas",
-  //   },
-  //   {
-  //     "nama": "Televisi",
-  //     "gambar": "televisi",
-  //   },
-  //   {
-  //     "nama": "Lainnya",
-  //     "gambar": "lainnya",
-  //   },
-  //   {
-  //     "nama": "Smartphone",
-  //     "gambar": "smartphone",
-  //   },
-  //   {
-  //     "nama": "Printer",
-  //     "gambar": "printer",
-  //   },
-  //   {
-  //     "nama": "Kulkas",
-  //     "gambar": "kulkas",
-  //   },
-  //   {
-  //     "nama": "Televisi",
-  //     "gambar": "televisi",
-  //   },
-  //   {
-  //     "nama": "Lainnya",
-  //     "gambar": "lainnya",
-  //   },
-  //   {
-  //     "nama": "Printer",
-  //     "gambar": "printer",
-  //   },
-  //   {
-  //     "nama": "Kulkas",
-  //     "gambar": "kulkas",
-  //   },
-  //   {
-  //     "nama": "Televisi",
-  //     "gambar": "televisi",
-  //   },
-  //   {
-  //     "nama": "Lainnya",
-  //     "gambar": "lainnya",
-  //   },
-  // ];
 
   final _jenisElektronik = Supabase.instance.client
       .from('jenis_elektronik')
@@ -193,6 +136,7 @@ class KomponenJenisElektronik extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(1.8),
                   child: GridJenisElektronik(
+                    tipe: "donasi",
                     listJenisEletronik: _jenisElektronik,
                   ),
                 ),

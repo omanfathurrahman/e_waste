@@ -1,27 +1,30 @@
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.gantiScreen});
+  final Function(int) gantiScreen;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: const [
-        KomponenHeader(),
-        SizedBox(height: 20),
-        KomponenPoin(),
-        SizedBox(height: 20),
-        KomponenNavigasi(),
-        SizedBox(height: 20),
-        KomponenIklan(),
-        SizedBox(height: 20),
-        Komponen5(),
+      children: [
+        const KomponenHeader(),
+        const SizedBox(height: 20),
+        const KomponenPoin(),
+        const SizedBox(height: 20),
+        KomponenNavigasi(gantiScreen: widget.gantiScreen),
+        const SizedBox(height: 20),
+        const KomponenIklan(),
+        const SizedBox(height: 20),
+        const Komponen5(),
       ],
     );
   }
@@ -38,7 +41,7 @@ class KomponenHeader extends StatelessWidget {
         Row(
           children: [
             Image.asset(
-              "assets/images/143035475_1029718927553677_5869815052519506947_n 1.png",
+              "assets/images/143035475_1029718927553677_5869815052519506947_n2.png",
             ),
             const SizedBox(width: 10),
             const Text(
@@ -115,7 +118,8 @@ class KomponenPoin extends StatelessWidget {
 }
 
 class KomponenNavigasi extends StatelessWidget {
-  const KomponenNavigasi({super.key});
+  const KomponenNavigasi({super.key, required this.gantiScreen});
+  final Function(int) gantiScreen;
 
   Widget container({
     required String icon,
@@ -170,16 +174,14 @@ class KomponenNavigasi extends StatelessWidget {
                 color: const Color(0xFFF2F2F2), // Button color
                 child: InkWell(
                   onTapUp: (details) {
-                    switch (icon){
+                    switch (icon) {
                       case "buang":
-                        // Navigator.pushNamed(context, '/buang');
-                        break;
+                        gantiScreen(1);
+                      // Navigator.pushNamed(context, '/buang');
                       case "donasi":
-                        // Navigator.pushNamed(context, '/donasi');
-                        break;
+                        gantiScreen(2);
                       case "service":
-                        // Navigator.pushNamed(context, '/service');
-                        break;
+                        gantiScreen(3);
                     }
                   },
                   splashColor: Colors.deepPurple[400], // Splash color
@@ -250,7 +252,7 @@ class Komponen5 extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromARGB(231, 249, 249, 249),
+        color: const Color.fromARGB(231, 249, 249, 249),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -277,7 +279,7 @@ class Komponen5 extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       tanggal,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w300,
                       ),
                     ),
@@ -319,14 +321,14 @@ class Komponen5 extends StatelessWidget {
           iconColor: const Color(0xFFF7A340),
           tanggal: "Hari ini, 2 Januari 2021",
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         container(
           icon: "service",
           judul: "Service Barang Elektronik",
           iconColor: const Color(0xFF2F80ED),
           tanggal: "01 Januari 2024",
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         container(
           icon: "buang",
           judul: "Buang Sampah Elektronik",
