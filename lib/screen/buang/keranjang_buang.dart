@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:e_waste/component/get_svg_widget.dart';
-import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
 import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/donasi/bawa_ke_drop_point.dart';
@@ -60,7 +57,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
     });
     if (beratKeseluruhan < 100) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Silahkan masukkan alamat anda"),
         ),
       );
@@ -71,7 +68,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Pengumpul barang akan menghubungi anda"),
         ),
       );
@@ -133,148 +130,173 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                         beratKeseluruhan += beratItem['berat_total'];
                       }
 
-                      return Column(children: [
-                        ...keranjangBuang
-                            .map(
-                              (item) => Dismissible(
-                                onDismissed: (direction) async {
-                                  await Supabase.instance.client
-                                      .from("keranjang_buang")
-                                      .delete()
-                                      .eq("id", item['id']);
-                                },
-                                confirmDismiss: (direction) {
-                                  return showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text("Konfirmasi"),
-                                      content: const Text(
-                                          "Apakah anda yakin ingin menghapus item ini?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                          child: const Text("Tidak"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          child: const Text("Ya"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                key: UniqueKey(),
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            FutureBuilder(
-                                              future: namaJenisElektronik(
-                                                  item['id_jenis_elektronik']),
-                                              builder: (context, snapshot) {
-                                                if (!snapshot.hasData) {
-                                                  return const Center(
-                                                      child:
-                                                          CircularProgressIndicator());
-                                                }
-                                                final namaJenisElektronik =
-                                                    snapshot.data!;
-                                                return GetSvgWidget(
-                                                  fileName: namaJenisElektronik,
-                                                );
-                                              },
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                FutureBuilder(
-                                                  future: namaJenisElektronik(
-                                                      item[
-                                                          'id_jenis_elektronik']),
-                                                  builder: (context, snapshot) {
-                                                    if (!snapshot.hasData) {
-                                                      return const Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                    }
-                                                    final namaJenisElektronik =
-                                                        snapshot.data!;
-                                                    return Text(
-                                                      namaJenisElektronik,
-                                                      style: const TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    );
-                                                  },
-                                                ),
-                                                Text(item['kategorisasi'] !=
-                                                        null
-                                                    ? "Jenis: ${item['kategorisasi'].toString().capitalize()}"
-                                                    : ""),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                                "Jumlah: ${item['jumlah'].toString()}"),
-                                            Text(
-                                                "${item['berat_total'].toString()} Kg"),
-                                          ],
-                                        )
-                                      ],
+                      return Column(
+                        children: [
+                          ...keranjangBuang
+                              .map(
+                                (item) => Dismissible(
+                                  onDismissed: (direction) async {
+                                    await Supabase.instance.client
+                                        .from("keranjang_buang")
+                                        .delete()
+                                        .eq("id", item['id']);
+                                  },
+                                  confirmDismiss: (direction) {
+                                    return showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Konfirmasi"),
+                                        content: const Text(
+                                            "Apakah anda yakin ingin menghapus item ini?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: const Text("Tidak"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text("Ya"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  key: UniqueKey(),
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              FutureBuilder(
+                                                future: namaJenisElektronik(
+                                                    item[
+                                                        'id_jenis_elektronik']),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData) {
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                  final namaJenisElektronik =
+                                                      snapshot.data!;
+                                                  return GetSvgWidget(
+                                                    fileName:
+                                                        namaJenisElektronik,
+                                                  );
+                                                },
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  FutureBuilder(
+                                                    future: namaJenisElektronik(
+                                                        item[
+                                                            'id_jenis_elektronik']),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Center(
+                                                            child:
+                                                                CircularProgressIndicator());
+                                                      }
+                                                      final namaJenisElektronik =
+                                                          snapshot.data!;
+                                                      return Text(
+                                                        namaJenisElektronik,
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      );
+                                                    },
+                                                  ),
+                                                  Text(item['kategorisasi'] !=
+                                                          null
+                                                      ? "Jenis: ${item['kategorisasi'].toString().capitalize()}"
+                                                      : ""),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                  "Jumlah: ${item['jumlah'].toString()}"),
+                                              Text(
+                                                  "${item['berat_total'].toString()} Kg"),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        beratKeseluruhan >= 100
-                            ? Text(
-                                "Total berat: ${beratKeseluruhan.toString()} Kg, Berat keseluruhan melebihi batas, sampah anda akan dijemput oleh pengumpul sampah",
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
                               )
-                            : Text(
-                                "Total berat: ${beratKeseluruhan.toString()} Kg, Silahkan bawa ke tempat pengumpulan sampah elektronik terdekat",
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                        FutureBuilder(
-                            future: getTotalBerat(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-                              final totalBerat = snapshot.data!;
-                              return Text(
-                                  "Jumlah poin yang akan anda dapatkan: ${totalBerat.toString()}");
-                            }),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            buangSampahDiKeranjang(
-                                beratKeseluruhan: beratKeseluruhan);
-                          },
-                          child: const Text("Buang"),
-                        ),
-                      ]);
+                              .toList(),
+                          beratKeseluruhan != 0
+                              ? (beratKeseluruhan >= 100
+                                  ? Text(
+                                      "Total berat: ${beratKeseluruhan.toString()} Kg, Berat keseluruhan melebihi batas, sampah anda akan dijemput oleh pengumpul sampah",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : Text(
+                                      "Total berat: ${beratKeseluruhan.toString()} Kg, Silahkan bawa ke tempat pengumpulan sampah elektronik terdekat",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      textAlign: TextAlign.center,
+                                    ))
+                              : Text('Keranjang kosong'),
+                          beratKeseluruhan != 0
+                              ? FutureBuilder(
+                                  future: getTotalBerat(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                    final totalBerat = snapshot.data!;
+                                    return Text(
+                                        "Jumlah poin yang akan anda dapatkan: ${totalBerat.toString()}");
+                                  })
+                              : Container(),
+                          const SizedBox(height: 20),
+                          beratKeseluruhan != 0
+                              ? ElevatedButton(
+                                  onPressed: () {
+                                    buangSampahDiKeranjang(
+                                        beratKeseluruhan: beratKeseluruhan);
+                                  },
+                                  child: const Text("Buang"),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainLayout(
+                                            curScreenIndex: 1,
+                                          ),
+                                        ));
+                                  },
+                                  child: Text("Buang Sampah Elektronik"),
+                                )
+                        ],
+                      );
                     },
                   ),
                 ],

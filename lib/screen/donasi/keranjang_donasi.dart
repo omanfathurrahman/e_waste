@@ -60,7 +60,7 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
     });
     if (beratKeseluruhan < 100) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Silahkan masukkan alamat anda"),
         ),
       );
@@ -71,7 +71,7 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Pengumpul barang akan menghubungi anda"),
         ),
       );
@@ -244,29 +244,53 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
                               ),
                             )
                             .toList(),
-                        beratKeseluruhan >= 100
-                            ? Text(
-                                "Total berat: ${beratKeseluruhan.toString()} Kg, Berat keseluruhan melebihi batas, sampah anda akan dijemput oleh pengumpul sampah",
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )
-                            : Text(
-                                "Total berat: ${beratKeseluruhan.toString()} Kg, Silahkan bawa ke tempat pengumpulan sampah elektronik terdekat",
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
+                        beratKeseluruhan != 0
+                            ? (beratKeseluruhan >= 100
+                                ? Text(
+                                    "Total berat: ${beratKeseluruhan.toString()} Kg, Berat keseluruhan melebihi batas, sampah anda akan dijemput oleh pengumpul sampah",
+                                    style: const TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  )
+                                : Text(
+                                    "Total berat: ${beratKeseluruhan.toString()} Kg, Silahkan bawa ke tempat pengumpulan sampah elektronik terdekat",
+                                    style: const TextStyle(color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ))
+                            : const Text('Keranjang kosong'),
+                        beratKeseluruhan != 0
+                            ? FutureBuilder(
+                                future: getTotalBerat(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                  final totalBerat = snapshot.data!;
+                                  return Text(
+                                      "Jumlah poin yang akan anda dapatkan: ${totalBerat.toString()}");
+                                })
+                            : Container(),
                         const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              donasiSampahDiKeranjang(
-                                beratKeseluruhan: beratKeseluruhan,
-                              );
-                            },
-                            child: const Text("Donasikan"),
-                          ),
-                        ),
+                        beratKeseluruhan != 0
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  donasiSampahDiKeranjang(
+                                      beratKeseluruhan: beratKeseluruhan);
+                                },
+                                child: const Text("Buang"),
+                              )
+                            : ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MainLayout(
+                                          curScreenIndex: 2,
+                                        ),
+                                      ));
+                                },
+                                child: const Text("Donasi Sampah Elektronik"),
+                              )
                       ]);
                     },
                   ),
@@ -301,6 +325,18 @@ Future<num> hitungBeratKeseluruhan(
     );
     print(beratSementara);
     beratKeseluruhan += item['jumlah'] * beratSementara;
+  }
+  return beratKeseluruhan;
+}
+
+Future<num> getTotalBerat() async {
+  final keranjangBuang = await Supabase.instance.client
+      .from("keranjang_donasi")
+      .select()
+      .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+  num beratKeseluruhan = 0;
+  for (var item in keranjangBuang) {
+    beratKeseluruhan += item['jumlah'];
   }
   return beratKeseluruhan;
 }

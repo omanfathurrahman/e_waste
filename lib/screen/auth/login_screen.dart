@@ -1,7 +1,5 @@
 import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/auth/register_screen.dart';
-import 'package:e_waste/screen/home/home_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,12 +15,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void signIn(BuildContext context) async {
-    print("hehe");
     final res = await Supabase.instance.client.auth.signInWithPassword(
       email: _emailController.text,
       password: _passwordController.text,
     );
-    print(res);
     if (!context.mounted) return;
     Navigator.push(
       context,

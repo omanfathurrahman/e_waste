@@ -77,7 +77,7 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Alamat",
+          "Pilih Kecamatan",
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
         const SizedBox(

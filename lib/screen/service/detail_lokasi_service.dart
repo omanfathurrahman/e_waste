@@ -47,9 +47,14 @@ class _DetailLokasiServiceScreenState extends State<DetailLokasiServiceScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       final kecamatan = snapshot.data;
-                      return Text(kecamatan.toString());
+                      return Text(
+                        kecamatan.toString(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      );
                     },
                   ),
+                  const SizedBox(height: 10),
                   FutureBuilder(
                     future: getServiceCenterMaps(
                       idServiceCenter: widget.idServiceCenter,
@@ -60,7 +65,10 @@ class _DetailLokasiServiceScreenState extends State<DetailLokasiServiceScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       final imgPath = snapshot.data!;
-                      return Image.memory(imgPath);
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.memory(imgPath),
+                      );
                     },
                   )
                 ],

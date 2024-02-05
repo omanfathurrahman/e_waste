@@ -1,4 +1,6 @@
+import 'package:e_waste/screen/auth/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -18,6 +20,8 @@ class ProfileScreen extends StatelessWidget {
         KomponenPoin(),
         SizedBox(height: 16),
         KomponenMenu(),
+        SizedBox(height: 16),
+        KomponenLogout(),
       ],
     );
   }
@@ -117,14 +121,14 @@ class KomponenMenu extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Column(
           children: [
             InkWell(
               onTap: () {
                 print("fdaf");
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
                   width: double.infinity,
@@ -135,28 +139,28 @@ class KomponenMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             InkWell(
               onTap: () {
                 print("fdaf");
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
-                    "Aktifitas Saya",
+                    "Riwayat Buang dan Donasi",
                     textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             InkWell(
               onTap: () {
                 print("fdaf");
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
                   width: double.infinity,
@@ -167,12 +171,12 @@ class KomponenMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             InkWell(
               onTap: () {
                 print("fdaf");
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
                   width: double.infinity,
@@ -183,12 +187,12 @@ class KomponenMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(height: 1.0),
+            const Divider(height: 1.0),
             InkWell(
               onTap: () {
                 print("fdaf");
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: SizedBox(
                   width: double.infinity,
@@ -203,5 +207,28 @@ class KomponenMenu extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class KomponenLogout extends StatelessWidget {
+  const KomponenLogout({super.key});
+
+  Future<void> _logout() async {
+    await Supabase.instance.client.auth.signOut();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          _logout();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
+        },
+        child: Text("Logout"));
   }
 }
