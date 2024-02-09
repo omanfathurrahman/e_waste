@@ -1,5 +1,5 @@
 import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/service/detail_lokasi_service.dart';
+import 'package:e_waste/screen/service/detail/detail_lokasi_service.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 // import 'package:supabase_flutter/supabase_flutter.dart';

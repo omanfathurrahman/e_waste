@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:e_waste/screen/service/lokasi_service_terdekat_screen.dart';
+import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

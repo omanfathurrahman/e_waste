@@ -1,6 +1,6 @@
 import 'package:e_waste/component/grid_jenis_elektronik.dart';
 import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/screen/donasi/keranjang_donasi.dart';
+import 'package:e_waste/screen/donasi/keranjang/keranjang_donasi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void signIn(BuildContext context) async {
-    final res = await Supabase.instance.client.auth.signInWithPassword(
+    await Supabase.instance.client.auth.signInWithPassword(
       email: _emailController.text,
       password: _passwordController.text,
     );

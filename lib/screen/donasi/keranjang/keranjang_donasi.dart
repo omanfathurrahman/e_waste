@@ -1,10 +1,9 @@
 // import 'dart:ffi';
 
 import 'package:e_waste/component/get_svg_widget.dart';
-import 'package:e_waste/component/icon_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
 import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/donasi/bawa_ke_drop_point.dart';
+import 'package:e_waste/screen/donasi/bawa_ke_droppoint/bawa_ke_drop_point.dart';
 import 'package:e_waste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

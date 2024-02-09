@@ -1,5 +1,5 @@
-import 'package:e_waste/screen/buang/detail_buang_jenis_elektronik_screen.dart';
-import 'package:e_waste/screen/donasi/detail_donasi_jenis_elektronik_screen.dart';
+import 'package:e_waste/screen/buang/detail/detail_buang_jenis_elektronik_screen.dart';
+import 'package:e_waste/screen/donasi/detail/detail_donasi_jenis_elektronik_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

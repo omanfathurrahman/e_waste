@@ -10,7 +10,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'screen/home/home_screen.dart';
 
-import 'dart:ffi';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
