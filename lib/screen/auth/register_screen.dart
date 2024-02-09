@@ -15,13 +15,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> signUp() async {
-    await Supabase.instance.client.auth.signUp(
+    final res = await Supabase.instance.client.auth.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       data: {
         'full_name': _fullnameController.text,
       },
     );
+    await Supabase.instance.client.from('profile').insert({
+      'id': res.user!.id,
+      'nama_lengkap': _fullnameController.text,
+      'email': _emailController.text,
+    });
     await Supabase.instance.client.auth.signOut();
     Navigator.pushReplacement(
       context,

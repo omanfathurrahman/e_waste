@@ -86,35 +86,6 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Nama lengkap",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.black, width: 1))),
-                                  child: const Text(
-                                    "John Doe",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
                                 "Email",
                                 style: TextStyle(
                                   fontSize: 14,
