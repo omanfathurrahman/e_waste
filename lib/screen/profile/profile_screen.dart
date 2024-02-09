@@ -1,4 +1,5 @@
 import 'package:e_waste/screen/auth/login_screen.dart';
+import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -126,7 +127,8 @@ class KomponenMenu extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => DetailProfileScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),

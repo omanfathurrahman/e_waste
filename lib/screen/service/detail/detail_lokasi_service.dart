@@ -40,36 +40,61 @@ class _DetailLokasiServiceScreenState extends State<DetailLokasiServiceScreen> {
               child: ListView(
                 children: [
                   KomponenHeader(idKecamatan: widget.idKecamatan),
-                  FutureBuilder(
-                    future: getServiceCenterName(widget.idKecamatan),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      final kecamatan = snapshot.data;
-                      return Text(
-                        kecamatan.toString(),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(
-                    future: getServiceCenterMaps(
-                      idServiceCenter: widget.idServiceCenter,
-                      idKecamatan: widget.idKecamatan,
+                  Container(
+                    color: Colors.white24,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          FutureBuilder(
+                            future: getServiceCenterName(widget.idKecamatan),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              final data =
+                                  snapshot.data as Map<String, dynamic>;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data['nama']!,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    data['alamat']!,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          FutureBuilder(
+                            future: getServiceCenterMaps(
+                              idServiceCenter: widget.idServiceCenter,
+                              idKecamatan: widget.idKecamatan,
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              final imgPath = snapshot.data!;
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.memory(imgPath),
+                              );
+                            },
+                          )
+                        ],
+                      ),
                     ),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      final imgPath = snapshot.data!;
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.memory(imgPath),
-                      );
-                    },
                   )
                 ],
               ),
@@ -110,14 +135,14 @@ class KomponenHeader extends StatelessWidget {
   }
 }
 
-Future<String> getServiceCenterName(num idKecamatan) async {
+Future<Map<String, dynamic>> getServiceCenterName(num idKecamatan) async {
   final response = await Supabase.instance.client
       .from('service_center')
-      .select('nama')
+      .select()
       .eq('id', idKecamatan)
       .limit(1)
       .single();
-  return response['nama'];
+  return response;
 }
 
 Future<Uint8List> getServiceCenterMaps({
