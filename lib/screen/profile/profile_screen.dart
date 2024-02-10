@@ -90,13 +90,17 @@ class KomponenProfile extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               const SizedBox(height: 6),
-              const Text(
-                "Wiraswasta",
+              Text(
+                (data['pekerjaan'] is String)
+                    ? data['pekerjaan']
+                    : 'Pekerjaan belum diisi',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               const SizedBox(height: 2),
-              const Text(
-                "Bojongsoang, Kab. Bandung",
+              Text(
+                (data['alamat'] is String)
+                    ? data['alamat']
+                    : 'Alamat belum diisi',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ],

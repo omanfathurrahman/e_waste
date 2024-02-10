@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:e_waste/main.dart';
+import 'package:e_waste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -209,19 +210,29 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.black,
-                                                    width: 1))),
-                                        child: Text(
-                                          data['email'],
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditEmailScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1))),
+                                          child: Text(
+                                            data['email'],
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
