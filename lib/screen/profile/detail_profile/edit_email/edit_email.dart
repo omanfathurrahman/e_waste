@@ -146,7 +146,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 2,
                                     ),
                                     const Text(
@@ -156,7 +156,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     TextField(
@@ -170,7 +170,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
