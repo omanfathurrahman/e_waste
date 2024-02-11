@@ -75,6 +75,7 @@ class KomponenProfile extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(width: 1)),
+                clipBehavior: Clip.hardEdge,
                 child: Image.network(
                   (data['img_url'] is String)
                       ? data['img_url']
@@ -83,7 +84,6 @@ class KomponenProfile extends StatelessWidget {
                   height: 100,
                   fit: BoxFit.cover,
                 ),
-                clipBehavior: Clip.hardEdge,
               ),
               Text(
                 data['nama_lengkap'],

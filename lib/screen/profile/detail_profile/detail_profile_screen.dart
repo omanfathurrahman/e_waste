@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:e_waste/main.dart';
+import 'package:e_waste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
 import 'package:e_waste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,8 +23,28 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
   @override
   void initState() {
     userId = Supabase.instance.client.auth.currentUser!.id;
-
     super.initState();
+  }
+
+  Future<String> _getAlamatLengkap() async {
+    final alamatRes = await Supabase.instance.client
+        .from('profile')
+        .select('alamat_id, detail_alamat')
+        .eq('id', userId)
+        .single()
+        .limit(1);
+
+    print(alamatRes);
+
+    final alamatDropdownRes = await Supabase.instance.client
+        .from('daftar_alamat')
+        .select('kabupaten_kota, kecamatan, kelurahan_desa')
+        .eq('id', alamatRes['alamat_id'])
+        .single()
+        .limit(1);
+
+    print(alamatDropdownRes);
+    return "${alamatRes['detail_alamat']}, ${alamatDropdownRes['kelurahan_desa']}, ${alamatDropdownRes['kecamatan']}, ${alamatDropdownRes['kabupaten_kota']}";
   }
 
   Future<Map<String, dynamic>> _getUser(id) async {
@@ -57,13 +78,6 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
       final fileExt = imageFile.path.split('.').last;
       final fileName = '${DateTime.now().toIso8601String()}.$fileExt';
       final filePath = fileName;
-      // await Supabase.instance.client.storage.from('avatars').updateBinary(
-      //       filePath,
-      //       bytes,
-      //       fileOptions: FileOptions(
-      //         contentType: imageFile.mimeType,
-      //       ),
-      //     );
       await Supabase.instance.client.storage.from('avatars').uploadBinary(
             filePath,
             bytes,
@@ -250,22 +264,45 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.black,
-                                                    width: 1))),
-                                        child: Text(
-                                          (data['alamat'] ?? false)
-                                              ? data['alamat']
-                                              : "",
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditAlamatScreen(),
                                           ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1))),
+                                          child: FutureBuilder(
+                                              future: _getAlamatLengkap(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return const Text(
+                                                    "Loading...",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.black,
+                                                    ),
+                                                  );
+                                                }
+                                                final alamatLengkap =
+                                                    snapshot.data as String;
+                                                return Text(
+                                                  alamatLengkap,
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                  ),
+                                                );
+                                              }),
                                         ),
                                       ),
                                     ),
