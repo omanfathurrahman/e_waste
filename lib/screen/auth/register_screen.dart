@@ -11,17 +11,24 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _fullnameController = TextEditingController();
+  final TextEditingController _pekerjaanController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> signUp() async {
-    await Supabase.instance.client.auth.signUp(
+    final res = await Supabase.instance.client.auth.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       data: {
         'full_name': _fullnameController.text,
       },
     );
+    await Supabase.instance.client.from('profile').insert({
+      'id': res.user!.id,
+      'nama_lengkap': _fullnameController.text,
+      'pekerjaan': _pekerjaanController.text,
+      'email': _emailController.text,
+    });
     await Supabase.instance.client.auth.signOut();
     Navigator.pushReplacement(
       context,
@@ -50,6 +57,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     icon: Icon(Icons.person),
                     hintText: 'Masukkan nama lengkap',
                     labelText: 'Nama Lengkap',
+                  ),
+                  onSaved: (String? value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String? value) {
+                    return (value != null && value.contains('@'))
+                        ? 'Do not use the @ char.'
+                        : null;
+                  },
+                ),
+                TextFormField(
+                  controller: _pekerjaanController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'Masukkan pekerjaan anda',
+                    labelText: 'Pekerjaan',
                   ),
                   onSaved: (String? value) {
                     // This optional block of code can be used to run

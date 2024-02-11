@@ -1,6 +1,5 @@
 import 'package:e_waste/component/icon_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.gantiScreen});
