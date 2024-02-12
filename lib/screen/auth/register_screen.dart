@@ -1,6 +1,6 @@
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/auth/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,26 +10,32 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // Create controllers for the text fields
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _pekerjaanController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Sign up the user
   Future<void> signUp() async {
-    final res = await Supabase.instance.client.auth.signUp(
+    // Sign up the user
+    final res = await supabase.auth.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       data: {
         'full_name': _fullnameController.text,
       },
     );
-    await Supabase.instance.client.from('profile').insert({
+    // Insert the user's profile
+    await supabase.from('profile').insert({
       'id': res.user!.id,
       'nama_lengkap': _fullnameController.text,
       'pekerjaan': _pekerjaanController.text,
       'email': _emailController.text,
     });
-    await Supabase.instance.client.auth.signOut();
+    // Log out the user
+    await supabase.auth.signOut();
+    // Redirect to the login screen
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -47,10 +53,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Form(
             child: Column(
               children: [
-                // Text("Nama Lengkap"),
-                // SizedBox(
-                //   height: 12,
-                // ),
                 TextFormField(
                   controller: _fullnameController,
                   decoration: const InputDecoration(

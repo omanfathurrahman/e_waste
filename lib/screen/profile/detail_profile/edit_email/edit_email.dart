@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditEmailScreen extends StatefulWidget {
   const EditEmailScreen({
@@ -22,9 +22,9 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
 
   @override
   void initState() {
-    userId = Supabase.instance.client.auth.currentUser!.id;
+    userId = supabase.auth.currentUser!.id;
 
-    Supabase.instance.client
+    supabase
         .from('profile')
         .select('email')
         .eq('id', userId)
@@ -36,7 +36,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
   }
 
   Future<Map<String, dynamic>> _getUser(id) async {
-    final response = await Supabase.instance.client
+    final response = await supabase
         .from('profile')
         .select()
         .eq('id', id)
@@ -52,13 +52,13 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
         _isLoading = true;
       });
 
-      await Supabase.instance.client
+      await supabase
           .from('profile')
           .update({'email': _emailController.text}).eq(
         'id',
         userId,
       );
-      await Supabase.instance.client.auth.updateUser(
+      await supabase.auth.updateUser(
         UserAttributes(
           email: _emailController.text,
         ),

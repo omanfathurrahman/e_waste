@@ -1,7 +1,7 @@
 import 'package:e_waste/main.dart';
+import 'package:e_waste/screen/main_layout.dart';
 import 'package:e_waste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailDonasiJenisElektronikScreen extends StatefulWidget {
   final String jenisKategorisasi;
@@ -23,7 +23,7 @@ class _DetailDonasiJenisElektronikScreenState
 
   String pilihanKategori = "";
   int jumlahBarang = 1;
-  var userId = Supabase.instance.client.auth.currentUser!.id;
+  var userId = supabase.auth.currentUser!.id;
 
   void gantiPilihan(String pilihan) {
     setState(() {
@@ -41,7 +41,7 @@ class _DetailDonasiJenisElektronikScreenState
 
   Future<void> tambahKeKeranjang() async {
     if (pilihanKategori == "") {
-      await Supabase.instance.client.from("keranjang_donasi").insert({
+      await supabase.from("keranjang_donasi").insert({
         "id_jenis_elektronik": widget.idJenisKategori,
         "id_user": userId,
         "jumlah": jumlahBarang,
@@ -50,7 +50,7 @@ class _DetailDonasiJenisElektronikScreenState
             jumlahBarang
       });
     } else {
-      await Supabase.instance.client.from("keranjang_donasi").insert({
+      await supabase.from("keranjang_donasi").insert({
         "id_jenis_elektronik": widget.idJenisKategori,
         "id_user": userId,
         "jumlah": jumlahBarang,
@@ -436,7 +436,7 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
 }
 
 Future<List<Map<String, dynamic>>> kategorisasiKSB({required int id}) async {
-  final response = await Supabase.instance.client
+  final response = await supabase
       .from('kategorisasi_kecilsedangbesar')
       .select()
       .eq('id_jenis_elektronik', id);
@@ -446,7 +446,7 @@ Future<List<Map<String, dynamic>>> kategorisasiKSB({required int id}) async {
 Future<List<Map<String, dynamic>>> kategorisasiPilihan(
     {required int id}) async {
   print(id);
-  final response = await Supabase.instance.client
+  final response = await supabase
       .from('kategorisasi_pilihan')
       .select()
       .eq('id_jenis_elektronik', id);

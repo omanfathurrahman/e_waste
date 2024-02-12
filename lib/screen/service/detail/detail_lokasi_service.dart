@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DetailLokasiServiceScreen extends StatefulWidget {
   const DetailLokasiServiceScreen(
@@ -136,7 +136,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 Future<Map<String, dynamic>> getServiceCenterName(num idKecamatan) async {
-  final response = await Supabase.instance.client
+  final response = await supabase
       .from('service_center')
       .select()
       .eq('id', idKecamatan)
@@ -149,14 +149,14 @@ Future<Uint8List> getServiceCenterMaps({
   required num idServiceCenter,
   required num idKecamatan,
 }) async {
-  final namaKecamatan = await Supabase.instance.client
+  final namaKecamatan = await supabase
       .from('kecamatan')
       .select('path')
       .eq('id', idKecamatan)
       .limit(1)
       .single();
 
-  final response = await Supabase.instance.client.storage
+  final response = await supabase.storage
       .from('service_center_image')
       .download('${namaKecamatan['path']}/$idServiceCenter.png');
 

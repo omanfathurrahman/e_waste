@@ -1,9 +1,9 @@
 import 'package:e_waste/component/grid_jenis_elektronik.dart';
 import 'package:e_waste/component/icon_widget.dart';
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/donasi/keranjang/keranjang_donasi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DonasiScreen extends StatelessWidget {
   const DonasiScreen({super.key});
@@ -86,13 +86,13 @@ class KomponenCari extends StatelessWidget {
 class KomponenJenisElektronik extends StatelessWidget {
   KomponenJenisElektronik({super.key});
 
-  final _jenisElektronik = Supabase.instance.client
+  final _jenisElektronik = supabase
       .from('jenis_elektronik')
       .select()
       .order("id", ascending: true);
 
   Future<Widget> getSvg(String fileName) async {
-    final response = await Supabase.instance.client.storage
+    final response = await supabase.storage
         .from('jenis_elektronik')
         .download('$fileName.svg');
 
