@@ -27,8 +27,9 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
         .select()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-    await supabase.from("sampah_didonasikan").insert(
-        {"id_user": supabase.auth.currentUser?.id as Object});
+    await supabase
+        .from("sampah_didonasikan")
+        .insert({"id_user": supabase.auth.currentUser?.id as Object});
     final idSampahDiDonasikanBaru = await supabase
         .from("sampah_didonasikan")
         .select()
@@ -54,8 +55,7 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
       daftarKeranjangDonasi = supabase
           .from("keranjang_donasi")
           .select()
-          .eq("id_user",
-              supabase.auth.currentUser?.id as Object);
+          .eq("id_user", supabase.auth.currentUser?.id as Object);
     });
     if (beratKeseluruhan < 100) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -84,6 +84,7 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       home: Stack(
         children: [
@@ -297,6 +298,33 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
               ),
             ),
           ),
+          Positioned(
+            bottom: 50,
+            child: SizedBox(
+              width: width,
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Untuk memastikan poin reward tercatat, anda diminta untuk melengkapi data alamat dengan melakukkan edit profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

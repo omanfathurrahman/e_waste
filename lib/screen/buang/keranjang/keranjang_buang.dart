@@ -82,6 +82,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       home: Stack(
         children: [
@@ -260,7 +261,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                                           const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ))
-                              : Text('Keranjang kosong'),
+                              : const Text('Keranjang kosong'),
                           beratKeseluruhan != 0
                               ? FutureBuilder(
                                   future: getTotalBerat(),
@@ -288,12 +289,13 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MainLayout(
+                                          builder: (context) =>
+                                              const MainLayout(
                                             curScreenIndex: 1,
                                           ),
                                         ));
                                   },
-                                  child: Text("Buang Sampah Elektronik"),
+                                  child: const Text("Buang Sampah Elektronik"),
                                 )
                         ],
                       );
@@ -303,6 +305,33 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
               ),
             ),
           ),
+          Positioned(
+            bottom: 50,
+            child: SizedBox(
+              width: width,
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Untuk memastikan poin reward tercatat, anda diminta untuk melengkapi data alamat dengan melakukkan edit profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

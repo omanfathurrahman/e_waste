@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
+  // Ensure that FlutterFire is initialized
   WidgetsFlutterBinding.ensureInitialized();
-
   await Supabase.initialize(
       url: 'https://oexltokstwraweaozqav.supabase.co',
       anonKey:
@@ -13,6 +13,7 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
+// Create a new instance of supabase
 final supabase = Supabase.instance.client;
 
 class MainApp extends StatelessWidget {

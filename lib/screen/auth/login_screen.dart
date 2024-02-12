@@ -11,15 +11,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Create controllers for the text fields
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Sign in the user
   void signIn(BuildContext context) async {
     await supabase.auth.signInWithPassword(
       email: _emailController.text,
       password: _passwordController.text,
     );
     if (!context.mounted) return;
+    // Redirect to the main layout
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -67,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         : null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 ElevatedButton(

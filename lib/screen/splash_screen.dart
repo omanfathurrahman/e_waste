@@ -17,20 +17,25 @@ class _SplashScreenState extends State<SplashScreen> {
     _redirect();
   }
 
+  // Redirect to the main layout if the user is logged in
   Future<void> _redirect() async {
+    // Wait for the next frame to avoid the splash screen from being skipped
     await Future.delayed(Duration.zero);
     if (!mounted) {
       return;
     }
 
+    // Check if the user is logged in
     final session = supabase.auth.currentSession;
     if (session != null) {
+      // Redirect to the main layout
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const MainLayout(),
         ),
       );
     } else {
+      // Redirect to the login screen
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),

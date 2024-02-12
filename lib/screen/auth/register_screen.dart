@@ -10,12 +10,15 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // Create controllers for the text fields
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _pekerjaanController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Sign up the user
   Future<void> signUp() async {
+    // Sign up the user
     final res = await supabase.auth.signUp(
       email: _emailController.text,
       password: _passwordController.text,
@@ -23,13 +26,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'full_name': _fullnameController.text,
       },
     );
+    // Insert the user's profile
     await supabase.from('profile').insert({
       'id': res.user!.id,
       'nama_lengkap': _fullnameController.text,
       'pekerjaan': _pekerjaanController.text,
       'email': _emailController.text,
     });
+    // Log out the user
     await supabase.auth.signOut();
+    // Redirect to the login screen
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -47,10 +53,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Form(
             child: Column(
               children: [
-                // Text("Nama Lengkap"),
-                // SizedBox(
-                //   height: 12,
-                // ),
                 TextFormField(
                   controller: _fullnameController,
                   decoration: const InputDecoration(
