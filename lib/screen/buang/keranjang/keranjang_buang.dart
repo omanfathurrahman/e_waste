@@ -1,10 +1,10 @@
 import 'package:e_waste/component/get_svg_widget.dart';
 import 'package:e_waste/extention/to_capitalize.dart';
 import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/donasi/bawa_ke_drop_point.dart';
+import 'package:e_waste/screen/donasi/bawa_ke_droppoint/bawa_ke_drop_point.dart';
+import 'package:e_waste/screen/main_layout.dart';
 import 'package:e_waste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class KeranjangBuang extends StatefulWidget {
   const KeranjangBuang({super.key});
@@ -14,27 +14,28 @@ class KeranjangBuang extends StatefulWidget {
 }
 
 class _KeranjangBuangState extends State<KeranjangBuang> {
-  var daftarKeranjangBuang = Supabase.instance.client
+  var daftarKeranjangBuang = supabase
       .from("keranjang_buang")
       .select()
-      .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+      .eq("id_user", supabase.auth.currentUser?.id as Object);
 
   void buangSampahDiKeranjang({required num beratKeseluruhan}) async {
-    final keranjangBuang = await Supabase.instance.client
+    final keranjangBuang = await supabase
         .from("keranjang_buang")
         .select()
-        .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+        .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-    await Supabase.instance.client.from("sampah_dibuang").insert(
-        {"id_user": Supabase.instance.client.auth.currentUser?.id as Object});
-    final idSampahDibuangBaru = await Supabase.instance.client
+    await supabase
+        .from("sampah_dibuang")
+        .insert({"id_user": supabase.auth.currentUser?.id as Object});
+    final idSampahDibuangBaru = await supabase
         .from("sampah_dibuang")
         .select()
         .order("id", ascending: false)
         .limit(1)
         .single();
     for (var item in keranjangBuang) {
-      await Supabase.instance.client.from("detail_sampah_dibuang").insert([
+      await supabase.from("detail_sampah_dibuang").insert([
         {
           "id_jenis_elektronik": item['id_jenis_elektronik'],
           "jumlah": item['jumlah'],
@@ -43,17 +44,16 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
         }
       ]);
     }
-    await Supabase.instance.client
+    await supabase
         .from("keranjang_buang")
         .delete()
-        .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+        .eq("id_user", supabase.auth.currentUser?.id as Object);
 
     setState(() {
-      daftarKeranjangBuang = Supabase.instance.client
+      daftarKeranjangBuang = supabase
           .from("keranjang_buang")
           .select()
-          .eq("id_user",
-              Supabase.instance.client.auth.currentUser?.id as Object);
+          .eq("id_user", supabase.auth.currentUser?.id as Object);
     });
     if (beratKeseluruhan < 100) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,6 +82,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       home: Stack(
         children: [
@@ -136,7 +137,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                               .map(
                                 (item) => Dismissible(
                                   onDismissed: (direction) async {
-                                    await Supabase.instance.client
+                                    await supabase
                                         .from("keranjang_buang")
                                         .delete()
                                         .eq("id", item['id']);
@@ -260,7 +261,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                                           const TextStyle(color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ))
-                              : Text('Keranjang kosong'),
+                              : const Text('Keranjang kosong'),
                           beratKeseluruhan != 0
                               ? FutureBuilder(
                                   future: getTotalBerat(),
@@ -288,12 +289,13 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MainLayout(
+                                          builder: (context) =>
+                                              const MainLayout(
                                             curScreenIndex: 1,
                                           ),
                                         ));
                                   },
-                                  child: Text("Buang Sampah Elektronik"),
+                                  child: const Text("Buang Sampah Elektronik"),
                                 )
                         ],
                       );
@@ -303,6 +305,33 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
               ),
             ),
           ),
+          Positioned(
+            bottom: 50,
+            child: SizedBox(
+              width: width,
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Untuk memastikan poin reward tercatat, anda diminta untuk melengkapi data alamat dengan melakukkan edit profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -310,7 +339,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
 }
 
 Future<String> namaJenisElektronik(int idJenisElektronik) async {
-  final jenisElektronik = await Supabase.instance.client
+  final jenisElektronik = await supabase
       .from("jenis_elektronik")
       .select("jenis")
       .eq("id", idJenisElektronik)
@@ -335,10 +364,10 @@ Future<num> hitungBeratKeseluruhan(
 }
 
 Future<num> getTotalBerat() async {
-  final keranjangBuang = await Supabase.instance.client
+  final keranjangBuang = await supabase
       .from("keranjang_buang")
       .select()
-      .eq("id_user", Supabase.instance.client.auth.currentUser?.id as Object);
+      .eq("id_user", supabase.auth.currentUser?.id as Object);
   num beratKeseluruhan = 0;
   for (var item in keranjangBuang) {
     beratKeseluruhan += item['jumlah'];
