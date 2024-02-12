@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:e_waste/main.dart';
+import 'package:e_waste/screen/main_layout.dart';
 import 'package:e_waste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
 import 'package:e_waste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'edit_pekerjaan/edit_pekerjaan.dart';
 
 class DetailProfileScreen extends StatefulWidget {
   const DetailProfileScreen({
@@ -22,12 +25,12 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
 
   @override
   void initState() {
-    userId = Supabase.instance.client.auth.currentUser!.id;
+    userId = supabase.auth.currentUser!.id;
     super.initState();
   }
 
   Future<String> _getAlamatLengkap() async {
-    final alamatRes = await Supabase.instance.client
+    final alamatRes = await supabase
         .from('profile')
         .select('alamat_id, detail_alamat')
         .eq('id', userId)
@@ -36,7 +39,7 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
 
     print(alamatRes);
 
-    final alamatDropdownRes = await Supabase.instance.client
+    final alamatDropdownRes = await supabase
         .from('daftar_alamat')
         .select('kabupaten_kota, kecamatan, kelurahan_desa')
         .eq('id', alamatRes['alamat_id'])
@@ -48,14 +51,26 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
   }
 
   Future<Map<String, dynamic>> _getUser(id) async {
-    final response = await Supabase.instance.client
-        .from('profile')
-        .select()
-        .eq('id', id)
-        .single()
-        .limit(1);
+    final response =
+        await supabase.from('profile').select().eq('id', id).single().limit(1);
 
     return response;
+  }
+
+  Future<String> _getPekerjaan() async {
+    final pekerjaanId = (await supabase
+        .from('profile')
+        .select('pekerjaan_id')
+        .eq('id', userId)
+        .single()
+        .limit(1))['pekerjaan_id'];
+    final namaPekerjaan = (await supabase
+        .from('daftar_pekerjaan')
+        .select('nama')
+        .eq('id', pekerjaanId)
+        .single()
+        .limit(1))['nama'];
+    return namaPekerjaan as String;
   }
 
   Future<void> _uploadProfilePic() async {
@@ -78,17 +93,17 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
       final fileExt = imageFile.path.split('.').last;
       final fileName = '${DateTime.now().toIso8601String()}.$fileExt';
       final filePath = fileName;
-      await Supabase.instance.client.storage.from('avatars').uploadBinary(
+      await supabase.storage.from('avatars').uploadBinary(
             filePath,
             bytes,
             fileOptions: FileOptions(
               contentType: imageFile.mimeType,
             ),
           );
-      final imageUrlResponse = await Supabase.instance.client.storage
+      final imageUrlResponse = await supabase.storage
           .from('avatars')
           .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
-      await Supabase.instance.client
+      await supabase
           .from('profile')
           .update({'img_url': imageUrlResponse}).eq('id', userId);
     } on StorageException catch (error) {
@@ -319,22 +334,45 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.black,
-                                                    width: 1))),
-                                        child: Text(
-                                          (data['pekerjaan'] ?? false)
-                                              ? data['pekerjaan']
-                                              : "",
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditPekerjaanScreen(),
                                           ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1))),
+                                          child: FutureBuilder(
+                                              future: _getPekerjaan(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return const Text(
+                                                    "Loading...",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.black,
+                                                    ),
+                                                  );
+                                                }
+                                                final pekerjaan =
+                                                    snapshot.data as String;
+                                                return Text(
+                                                  pekerjaan,
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                  ),
+                                                );
+                                              }),
                                         ),
                                       ),
                                     ),

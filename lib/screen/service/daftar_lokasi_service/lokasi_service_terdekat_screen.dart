@@ -1,8 +1,7 @@
 import 'package:e_waste/main.dart';
+import 'package:e_waste/screen/main_layout.dart';
 import 'package:e_waste/screen/service/detail/detail_lokasi_service.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LokasiServiceTerdekatScreen extends StatelessWidget {
   const LokasiServiceTerdekatScreen({super.key, required this.idKecamatan});
@@ -106,7 +105,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 Future<List<Map<String, dynamic>>> getKecamatanName({required num id}) async {
-  final response = await Supabase.instance.client
+  final response = await supabase
       .from('service_center')
       .select()
       .eq('id_kecamatan', id);

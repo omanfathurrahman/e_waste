@@ -1,7 +1,7 @@
 import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/auth/login_screen.dart';
+import 'package:e_waste/screen/main_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    final session = Supabase.instance.client.auth.currentSession;
+    final session = supabase.auth.currentSession;
     if (session != null) {
       Navigator.of(context).push(
         MaterialPageRoute(

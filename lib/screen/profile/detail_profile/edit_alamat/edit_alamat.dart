@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditAlamatScreen extends StatefulWidget {
@@ -31,7 +30,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
 
   @override
   void initState() {
-    userId = Supabase.instance.client.auth.currentUser!.id;
+    userId = supabase.auth.currentUser!.id;
     _inisializeData();
     _getAlamatOption();
     super.initState();
@@ -54,13 +53,13 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
   }
 
   Future<Map<String, dynamic>> _getUserAlamat(id) async {
-    final alamat = await Supabase.instance.client
+    final alamat = await supabase
         .from('profile')
         .select('alamat_id, detail_alamat')
         .eq('id', id)
         .single()
         .limit(1);
-    final detailAlamat = await Supabase.instance.client
+    final detailAlamat = await supabase
         .from('daftar_alamat')
         .select()
         .eq('id', alamat['alamat_id'])
@@ -72,7 +71,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
 
   Future<List<Map<String, dynamic>>> _getAlamatOption() async {
     final alamat =
-        await Supabase.instance.client.from('daftar_alamat').select();
+        await supabase.from('daftar_alamat').select();
     return alamat;
   }
 
@@ -80,7 +79,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
     setState(() {
       _isLoading = true;
     });
-    var selectedAlamatId = await Supabase.instance.client
+    var selectedAlamatId = await supabase
         .from('daftar_alamat')
         .select('id')
         .eq('kabupaten_kota', _kabupatenKotaController.text)
@@ -89,7 +88,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
         .single()
         .limit(1);
 
-    await Supabase.instance.client.from('profile').update({
+    await supabase.from('profile').update({
       'alamat_id': selectedAlamatId['id'],
       'detail_alamat': _jalanController.text
     }).eq('id', userId);
@@ -99,7 +98,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
   }
 
   Future<void> _getAllKecamatan() async {
-    final kecamatan = await Supabase.instance.client
+    final kecamatan = await supabase
         .from('daftar_alamat')
         .select('kecamatan')
         .eq('kabupaten_kota', _kabupatenKotaController.text);
@@ -110,7 +109,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
   }
 
   Future<void> _getAllKelurahanDesa() async {
-    final kelurahanDesa = await Supabase.instance.client
+    final kelurahanDesa = await supabase
         .from('daftar_alamat')
         .select('kelurahan_desa')
         .eq('kecamatan', _kecamatanController.text);
@@ -327,7 +326,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 Future<List<dynamic>> _getAllKabupatenKota() async {
-  final kabupatenKota = await Supabase.instance.client
+  final kabupatenKota = await supabase
       .from('daftar_alamat')
       .select('kabupaten_kota');
   return kabupatenKota.map((item) => item['kabupaten_kota']).toSet().toList();

@@ -1,6 +1,6 @@
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
@@ -66,7 +66,7 @@ class KomponenAlamat extends StatefulWidget {
 
 class _KomponenAlamatState extends State<KomponenAlamat> {
   // final TextEditingController alamatController = TextEditingController();
-  final listKecamatan = Supabase.instance.client
+  final listKecamatan = supabase
       .from('kecamatan')
       .select()
       .order("id", ascending: true);
@@ -164,7 +164,7 @@ class _KomponenDropdownState extends State<KomponenDropdown> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final jenisElektronik = Supabase.instance.client
+    final jenisElektronik = supabase
         .from('jenis_elektronik')
         .select()
         .order("id", ascending: true);

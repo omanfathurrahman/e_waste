@@ -1,7 +1,7 @@
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/auth/login_screen.dart';
 import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    userId = Supabase.instance.client.auth.currentUser!.id;
+    userId = supabase.auth.currentUser!.id;
 
     super.initState();
   }
@@ -47,7 +47,7 @@ class KomponenProfile extends StatelessWidget {
   final String? userId;
 
   Future<Map<String, dynamic>> getUser(id) async {
-    final response = await Supabase.instance.client
+    final response = await supabase
         .from('profile')
         .select()
         .eq('id', id)
@@ -114,7 +114,7 @@ class KomponenPoin extends StatelessWidget {
   final String userId;
 
   Future<Map<String, dynamic>> getUser(id) async {
-    final response = await Supabase.instance.client
+    final response = await supabase
         .from('profile')
         .select()
         .eq('id', id)
@@ -292,7 +292,7 @@ class KomponenLogout extends StatelessWidget {
   const KomponenLogout({super.key});
 
   Future<void> _logout() async {
-    await Supabase.instance.client.auth.signOut();
+    await supabase.auth.signOut();
   }
 
   @override

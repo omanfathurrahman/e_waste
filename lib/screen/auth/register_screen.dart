@@ -1,6 +1,6 @@
+import 'package:e_waste/main.dart';
 import 'package:e_waste/screen/auth/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,20 +16,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> signUp() async {
-    final res = await Supabase.instance.client.auth.signUp(
+    final res = await supabase.auth.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       data: {
         'full_name': _fullnameController.text,
       },
     );
-    await Supabase.instance.client.from('profile').insert({
+    await supabase.from('profile').insert({
       'id': res.user!.id,
       'nama_lengkap': _fullnameController.text,
       'pekerjaan': _pekerjaanController.text,
       'email': _emailController.text,
     });
-    await Supabase.instance.client.auth.signOut();
+    await supabase.auth.signOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
