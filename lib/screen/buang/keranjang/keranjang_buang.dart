@@ -25,9 +25,10 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
         .select()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-    await supabase
-        .from("sampah_dibuang")
-        .insert({"id_user": supabase.auth.currentUser?.id as Object});
+    await supabase.from("sampah_dibuang").insert({
+      "id_user": supabase.auth.currentUser?.id as Object,
+      "pilihan_antar_jemput": beratKeseluruhan > 100 ? 'dijemput' : 'diantar',
+    });
     final idSampahDibuangBaru = await supabase
         .from("sampah_dibuang")
         .select()
