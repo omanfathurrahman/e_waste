@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
 
 class DetailLokasiServiceScreen extends StatefulWidget {
@@ -77,9 +77,7 @@ class _DetailLokasiServiceScreenState extends State<DetailLokasiServiceScreen> {
                           const SizedBox(height: 10),
                           FutureBuilder(
                             future: getServiceCenterMaps(
-                              idServiceCenter: widget.idServiceCenter,
-                              idKecamatan: widget.idKecamatan,
-                            ),
+                                idServiceCenter: widget.idServiceCenter),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
@@ -88,7 +86,7 @@ class _DetailLokasiServiceScreenState extends State<DetailLokasiServiceScreen> {
                               final imgPath = snapshot.data!;
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.memory(imgPath),
+                                child: Image.network(imgPath),
                               );
                             },
                           )
@@ -137,7 +135,7 @@ class KomponenHeader extends StatelessWidget {
 
 Future<Map<String, dynamic>> getServiceCenterName(num idKecamatan) async {
   final response = await supabase
-      .from('service_center')
+      .from('daftar_servicecenter')
       .select()
       .eq('id', idKecamatan)
       .limit(1)
@@ -145,20 +143,14 @@ Future<Map<String, dynamic>> getServiceCenterName(num idKecamatan) async {
   return response;
 }
 
-Future<Uint8List> getServiceCenterMaps({
+Future<String> getServiceCenterMaps({
   required num idServiceCenter,
-  required num idKecamatan,
 }) async {
-  final namaKecamatan = await supabase
-      .from('kecamatan')
-      .select('path')
-      .eq('id', idKecamatan)
-      .limit(1)
-      .single();
-
-  final response = await supabase.storage
-      .from('service_center_image')
-      .download('${namaKecamatan['path']}/$idServiceCenter.png');
+  // final response = await supabase.storage
+  //     .from('peta_servicecenter')
+  //     .download('$idServiceCenter.png');
+  final response = await supabase.storage.from("peta_servicecenter").getPublicUrl(
+      "$idServiceCenter.png");
 
   return response;
 }

@@ -1,4 +1,4 @@
-import 'package:e_waste/component/icon_widget.dart';
+import 'package:ewaste/component/icon_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -228,7 +228,7 @@ class KomponenIklan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Image.asset(
         "assets/images/iklan.png",

@@ -1,6 +1,6 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/main_layout.dart';
-import 'package:e_waste/utils/hitung_berat.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/main_layout.dart';
+import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 
 class DetailDonasiJenisElektronikScreen extends StatefulWidget {
@@ -62,7 +62,7 @@ class _DetailDonasiJenisElektronikScreenState
       });
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text("Berhasil ditambahkan ke keranjang"),
       ),
     );
@@ -171,7 +171,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 class KomponenUkuranBarang extends StatefulWidget {
-  KomponenUkuranBarang(
+  const KomponenUkuranBarang(
       {super.key, required this.idJenisKategori, required this.gantiPilihan});
   final Function(String pilihan) gantiPilihan;
   final int idJenisKategori;
@@ -354,7 +354,7 @@ class KomponenJumlahBarang extends StatelessWidget {
 }
 
 class KomponenTombol extends StatelessWidget {
-  KomponenTombol({super.key, required this.tambahKeKeranjang});
+  const KomponenTombol({super.key, required this.tambahKeKeranjang});
   final Function() tambahKeKeranjang;
 
   @override

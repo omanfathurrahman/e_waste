@@ -1,4 +1,4 @@
-import 'package:e_waste/screen/splash_screen.dart';
+import 'package:ewaste/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

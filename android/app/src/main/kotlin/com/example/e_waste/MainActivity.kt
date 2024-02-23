@@ -1,4 +1,4 @@
-package com.example.e_waste
+package com.example.ewaste
 
 import io.flutter.embedding.android.FlutterActivity
 

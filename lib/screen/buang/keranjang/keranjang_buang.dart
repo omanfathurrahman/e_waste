@@ -1,9 +1,10 @@
-import 'package:e_waste/component/get_svg_widget.dart';
-import 'package:e_waste/extention/to_capitalize.dart';
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/donasi/bawa_ke_droppoint/bawa_ke_drop_point.dart';
-import 'package:e_waste/screen/main_layout.dart';
-import 'package:e_waste/utils/hitung_berat.dart';
+import 'package:ewaste/component/get_svg_widget.dart';
+import 'package:ewaste/extention/to_capitalize.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/buang/bawa_ke_droppoin/bawa_ke_droppoin.dart';
+// import 'package:ewaste/screen/donasi/bawa_ke_droppoin/bawa_ke_drop_poin.dart';
+import 'package:ewaste/screen/main_layout.dart';
+import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 
 class KeranjangBuang extends StatefulWidget {
@@ -19,43 +20,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
       .select()
       .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-  void buangSampahDiKeranjang({required num beratKeseluruhan}) async {
-    final keranjangBuang = await supabase
-        .from("keranjang_buang")
-        .select()
-        .eq("id_user", supabase.auth.currentUser?.id as Object);
-
-    await supabase.from("sampah_dibuang").insert({
-      "id_user": supabase.auth.currentUser?.id as Object,
-      "pilihan_antar_jemput": beratKeseluruhan > 100 ? 'dijemput' : 'diantar',
-    });
-    final idSampahDibuangBaru = await supabase
-        .from("sampah_dibuang")
-        .select()
-        .order("id", ascending: false)
-        .limit(1)
-        .single();
-    for (var item in keranjangBuang) {
-      await supabase.from("detail_sampah_dibuang").insert([
-        {
-          "id_jenis_elektronik": item['id_jenis_elektronik'],
-          "jumlah": item['jumlah'],
-          "kategorisasi": item['kategorisasi'],
-          "id_sampah_dibuang": idSampahDibuangBaru['id'],
-        }
-      ]);
-    }
-    await supabase
-        .from("keranjang_buang")
-        .delete()
-        .eq("id_user", supabase.auth.currentUser?.id as Object);
-
-    setState(() {
-      daftarKeranjangBuang = supabase
-          .from("keranjang_buang")
-          .select()
-          .eq("id_user", supabase.auth.currentUser?.id as Object);
-    });
+  Future<void> _buangSampahDiKeranjang({required num beratKeseluruhan}) async {
     if (beratKeseluruhan < 100) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -64,10 +29,39 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
       );
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const BawaKeDropPointScreen(),
+          builder: (context) => const BawaKeDropPointBuangScreen(),
         ),
       );
     } else {
+      final keranjangBuang = await supabase
+          .from("keranjang_buang")
+          .select()
+          .eq("id_user", supabase.auth.currentUser?.id as Object);
+
+      await supabase.from("sampah_dibuang").insert({
+        "id_user": supabase.auth.currentUser?.id as Object,
+        "pilihan_antar_jemput": beratKeseluruhan > 100 ? 'dijemput' : 'diantar',
+      });
+      final idSampahDibuangBaru = await supabase
+          .from("sampah_dibuang")
+          .select()
+          .order("id", ascending: false)
+          .limit(1)
+          .single();
+      for (var item in keranjangBuang) {
+        await supabase.from("detail_sampah_dibuang").insert([
+          {
+            "id_jenis_elektronik": item['id_jenis_elektronik'],
+            "jumlah": item['jumlah'],
+            "kategorisasi": item['kategorisasi'],
+            "id_sampah_dibuang": idSampahDibuangBaru['id'],
+          }
+        ]);
+      }
+      await supabase
+          .from("keranjang_buang")
+          .delete()
+          .eq("id_user", supabase.auth.currentUser?.id as Object);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Pengumpul barang akan menghubungi anda"),
@@ -79,6 +73,12 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
         ),
       );
     }
+    setState(() {
+      daftarKeranjangBuang = supabase
+          .from("keranjang_buang")
+          .select()
+          .eq("id_user", supabase.auth.currentUser?.id as Object);
+    });
   }
 
   @override
@@ -109,7 +109,13 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                     children: [
                       BackButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MainLayout(
+                                curScreenIndex: 1,
+                              ),
+                            ),
+                          );
                         },
                         color: Colors.white,
                       ),
@@ -280,7 +286,7 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                           beratKeseluruhan != 0
                               ? ElevatedButton(
                                   onPressed: () {
-                                    buangSampahDiKeranjang(
+                                    _buangSampahDiKeranjang(
                                         beratKeseluruhan: beratKeseluruhan);
                                   },
                                   child: const Text("Buang"),
@@ -354,11 +360,9 @@ Future<num> hitungBeratKeseluruhan(
   print(keranjangBuang);
   num beratKeseluruhan = 0;
   for (var item in keranjangBuang) {
-    print(item);
     num beratSementara = await beratJenisElektronik(
       idJenisElektronik: item['id_jenis_elektronik'],
     );
-    print(beratSementara);
     beratKeseluruhan += item['jumlah'] * beratSementara;
   }
   return beratKeseluruhan;

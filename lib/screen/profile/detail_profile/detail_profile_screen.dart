@@ -1,9 +1,8 @@
-import 'dart:ui';
 
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/main_layout.dart';
-import 'package:e_waste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
-import 'package:e_waste/screen/profile/detail_profile/edit_email/edit_email.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/main_layout.dart';
+import 'package:ewaste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
+import 'package:ewaste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

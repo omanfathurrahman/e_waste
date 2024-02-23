@@ -1,9 +1,6 @@
-import 'dart:ui';
-
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditAlamatScreen extends StatefulWidget {
   const EditAlamatScreen({
@@ -70,8 +67,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
   }
 
   Future<List<Map<String, dynamic>>> _getAlamatOption() async {
-    final alamat =
-        await supabase.from('daftar_alamat').select();
+    final alamat = await supabase.from('daftar_alamat').select();
     return alamat;
   }
 
@@ -92,9 +88,24 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
       'alamat_id': selectedAlamatId['id'],
       'detail_alamat': _jalanController.text
     }).eq('id', userId);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Alamat berhasil diubah"),
+        ),
+      );
+    }
     setState(() {
       _isLoading = false;
     });
+    if (mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const DetailProfileScreen(),
+        ),
+      );
+    }
   }
 
   Future<void> _getAllKecamatan() async {
@@ -326,8 +337,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 Future<List<dynamic>> _getAllKabupatenKota() async {
-  final kabupatenKota = await supabase
-      .from('daftar_alamat')
-      .select('kabupaten_kota');
+  final kabupatenKota =
+      await supabase.from('daftar_alamat').select('kabupaten_kota');
   return kabupatenKota.map((item) => item['kabupaten_kota']).toSet().toList();
 }

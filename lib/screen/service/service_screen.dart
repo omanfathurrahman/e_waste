@@ -1,5 +1,5 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -94,7 +94,7 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
               onSelected: (value) {
                 widget.alamat.text = value.toString();
               },
-              controller: widget.alamat,
+              // controller: widget.alamat,
               textStyle: const TextStyle(color: Colors.white),
               inputDecorationTheme: const InputDecorationTheme(
                 focusedBorder: OutlineInputBorder(

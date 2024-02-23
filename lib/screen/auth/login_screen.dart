@@ -1,6 +1,6 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/auth/register_screen.dart';
-import 'package:e_waste/screen/main_layout.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/auth/register_screen.dart';
+import 'package:ewaste/screen/main_layout.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {

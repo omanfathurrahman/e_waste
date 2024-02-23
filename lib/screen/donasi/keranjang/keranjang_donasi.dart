@@ -1,11 +1,11 @@
 // import 'dart:ffi';
 
-import 'package:e_waste/component/get_svg_widget.dart';
-import 'package:e_waste/extention/to_capitalize.dart';
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/donasi/bawa_ke_droppoint/bawa_ke_drop_point.dart';
-import 'package:e_waste/screen/main_layout.dart';
-import 'package:e_waste/utils/hitung_berat.dart';
+import 'package:ewaste/component/get_svg_widget.dart';
+import 'package:ewaste/extention/to_capitalize.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/donasi/bawa_ke_droppoin/bawa_ke_drop_poin.dart';
+import 'package:ewaste/screen/main_layout.dart';
+import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 
 class KeranjangDonasi extends StatefulWidget {
@@ -65,7 +65,7 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
       );
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const BawaKeDropPointScreen(),
+          builder: (context) => const BawaKeDropPointDonasiScreen(),
         ),
       );
     } else {
@@ -110,7 +110,13 @@ class _KeranjangDonasiState extends State<KeranjangDonasi> {
                     children: [
                       BackButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MainLayout(
+                                curScreenIndex: 2,
+                              ),
+                            ),
+                          );
                         },
                         color: Colors.white,
                       ),

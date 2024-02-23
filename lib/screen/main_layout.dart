@@ -1,11 +1,11 @@
 
-import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/extention/to_capitalize.dart';
-import 'package:e_waste/screen/buang/buang_screen.dart';
-import 'package:e_waste/screen/donasi/donasi_screen.dart';
-import 'package:e_waste/screen/home/home_screen.dart';
-import 'package:e_waste/screen/profile/profile_screen.dart';
-import 'package:e_waste/screen/service/service_screen.dart';
+import 'package:ewaste/component/icon_widget.dart';
+import 'package:ewaste/extention/to_capitalize.dart';
+import 'package:ewaste/screen/buang/buang_screen.dart';
+import 'package:ewaste/screen/donasi/donasi_screen.dart';
+import 'package:ewaste/screen/home/home_screen.dart';
+import 'package:ewaste/screen/profile/profile_screen.dart';
+import 'package:ewaste/screen/service/service_screen.dart';
 import 'package:flutter/material.dart';
 
 enum NavbarOption {

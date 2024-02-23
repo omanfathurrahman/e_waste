@@ -1,6 +1,7 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/auth/login_screen.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/auth/login_screen.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/screen/profile/riwayat_buang_donasi/riwayat_buang_donasi.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class KomponenProfile extends StatelessWidget {
-  KomponenProfile({super.key, required this.userId});
+  const KomponenProfile({super.key, required this.userId});
   final String? userId;
 
   Future<Map<String, dynamic>> getUser(id) async {
@@ -94,14 +95,14 @@ class KomponenProfile extends StatelessWidget {
                 (data['pekerjaan'] is String)
                     ? data['pekerjaan']
                     : 'Pekerjaan belum diisi',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
               const SizedBox(height: 2),
               Text(
                 (data['alamat'] is String)
                     ? data['alamat']
                     : 'Alamat belum diisi',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
             ],
           );
@@ -163,13 +164,13 @@ class KomponenPoin extends StatelessWidget {
                   const SizedBox(width: 32),
                   Column(
                     children: [
-                      Text(
+                      const Text(
                         "Status",
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         data['status'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: Colors.white),
@@ -220,7 +221,7 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RiwayatBuangDonasi()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),

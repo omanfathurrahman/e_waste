@@ -1,9 +1,7 @@
-import 'dart:ui';
 
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditEmailScreen extends StatefulWidget {

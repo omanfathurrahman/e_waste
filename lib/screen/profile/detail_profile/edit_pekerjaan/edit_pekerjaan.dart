@@ -1,5 +1,5 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class EditPekerjaanScreen extends StatefulWidget {
