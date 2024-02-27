@@ -1,9 +1,10 @@
-import 'package:ewaste/component/grid_jenis_elektronik.dart';
+import 'package:ewaste/screen/grid_jenis_elektronik.dart';
 import 'package:ewaste/component/icon_widget.dart';
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/buang/keranjang/keranjang_buang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class BuangScreen extends StatelessWidget {
   const BuangScreen({super.key});
@@ -40,9 +41,7 @@ class KomponenHeader extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.deepPurple[400], // Splash color
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const KeranjangBuang();
-                }));
+                context.go('/buang/keranjang');
               },
               child: const SizedBox(
                   width: 40,

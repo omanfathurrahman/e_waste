@@ -19,48 +19,6 @@ class _DaftarDroppoinStateBuang extends State<DaftarDroppoinBuang> {
         MaterialPageRoute(
           builder: (context) => DetailBuangDroppoin(droppoinId: droppoinId),
         ));
-    // print(droppoinId);
-    // final keranjangBuang = await supabase
-    //       .from("keranjang_buang")
-    //       .select()
-    //       .eq("id_user", supabase.auth.currentUser?.id as Object);
-
-    //   await supabase.from("sampah_dibuang").insert({
-    //     "id_user": supabase.auth.currentUser?.id as Object,
-    //     "droppoin_id": droppoinId,
-    //     "pilihan_antar_jemput": 'diantar',
-    //   });
-    //   final idSampahDibuangBaru = await supabase
-    //       .from("sampah_dibuang")
-    //       .select()
-    //       .order("id", ascending: false)
-    //       .limit(1)
-    //       .single();
-    //   for (var item in keranjangBuang) {
-    //     await supabase.from("detail_sampah_dibuang").insert([
-    //       {
-    //         "id_jenis_elektronik": item['id_jenis_elektronik'],
-    //         "jumlah": item['jumlah'],
-    //         "kategorisasi": item['kategorisasi'],
-    //         "id_sampah_dibuang": idSampahDibuangBaru['id'],
-    //       }
-    //     ]);
-    //   }
-    //   await supabase
-    //       .from("keranjang_buang")
-    //       .delete()
-    //       .eq("id_user", supabase.auth.currentUser?.id as Object);
-
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(
-    //       content: Text("Pengumpul barang akan menghubungi anda"),
-    //     ),
-    //   );
-    //   Navigator.of(context).push(
-    //     MaterialPageRoute(
-    //       builder: (context) => const MainLayout(curScreenIndex: 1),
-    //     ),
-    //   );
   }
 
   @override

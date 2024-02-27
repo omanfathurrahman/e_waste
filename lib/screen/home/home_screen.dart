@@ -176,7 +176,6 @@ class KomponenNavigasi extends StatelessWidget {
                     switch (icon) {
                       case "buang":
                         gantiScreen(1);
-                      // Navigator.pushNamed(context, '/buang');
                       case "donasi":
                         gantiScreen(2);
                       case "service":

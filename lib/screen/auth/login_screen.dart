@@ -2,6 +2,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/auth/register_screen.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,14 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
       email: _emailController.text,
       password: _passwordController.text,
     );
-    if (!context.mounted) return;
     // Redirect to the main layout
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MainLayout(curScreenIndex: 0),
-      ),
-    );
+    if (mounted) context.go('/main-layout');
   }
 
   @override
@@ -82,12 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text("Belum punya akun?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
+                        context.go('/register');
+
                       },
                       child: const Text("Register"),
                     ),

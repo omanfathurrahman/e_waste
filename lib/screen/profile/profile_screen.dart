@@ -3,6 +3,7 @@ import 'package:ewaste/screen/auth/login_screen.dart';
 import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:ewaste/screen/profile/riwayat_buang_donasi/riwayat_buang_donasi.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,7 +16,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String userId;
   @override
   void initState() {
-    // TODO: implement initState
     userId = supabase.auth.currentUser!.id;
 
     super.initState();
@@ -202,10 +202,7 @@ class KomponenMenu extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DetailProfileScreen()));
+                context.go('/profile/detail');
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -221,7 +218,7 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RiwayatBuangDonasi()));
+                context.go('/profile/riwayat');
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),

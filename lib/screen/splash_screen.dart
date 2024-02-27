@@ -2,6 +2,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/auth/login_screen.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,18 +30,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final session = supabase.auth.currentSession;
     if (session != null) {
       // Redirect to the main layout
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const MainLayout(),
-        ),
-      );
+      context.go('/main-layout');
     } else {
       // Redirect to the login screen
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        ),
-      );
+      context.go('/login');
     }
   }
 

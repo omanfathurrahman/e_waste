@@ -2,6 +2,7 @@
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditEmailScreen extends StatefulWidget {
@@ -214,11 +215,7 @@ class KomponenHeader extends StatelessWidget {
         BackButton(
           color: Colors.white,
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const DetailProfileScreen(),
-              ),
-            );
+            context.go('/profile/detail');
           },
         ),
         // const Text(

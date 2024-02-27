@@ -4,13 +4,13 @@ import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 
 class DetailDonasiJenisElektronikScreen extends StatefulWidget {
-  final String jenisKategorisasi;
-  final int idJenisKategori;
   const DetailDonasiJenisElektronikScreen({
     super.key,
     required this.jenisKategorisasi,
     required this.idJenisKategori,
   });
+  final String jenisKategorisasi;
+  final int idJenisKategori;
 
   @override
   State<DetailDonasiJenisElektronikScreen> createState() =>

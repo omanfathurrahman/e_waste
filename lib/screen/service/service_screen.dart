@@ -1,6 +1,6 @@
 import 'package:ewaste/main.dart';
-import 'package:ewaste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
@@ -130,12 +130,13 @@ class KomponenTombol extends StatelessWidget {
       onPressed: () => {
         if (alamat.value.text != "")
           {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => LokasiServiceTerdekatScreen(
-                    idKecamatan: int.parse(alamat.value.text)),
-              ),
-            )
+            context.go('/service/list/${int.parse(alamat.value.text)}'), 
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => LokasiServiceTerdekatScreen(
+            //         idKecamatan: int.parse(alamat.value.text)),
+            //   ),
+            // )
           }
         else
           {

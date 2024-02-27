@@ -1,6 +1,7 @@
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/auth/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -36,12 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Log out the user
     await supabase.auth.signOut();
     // Redirect to the login screen
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+    if (mounted) context.go('/login');
   }
 
   @override
@@ -139,12 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const Text("Sudah punya akun?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                        );
+                        context.go('/login');
                       },
                       child: const Text("Login"),
                     ),

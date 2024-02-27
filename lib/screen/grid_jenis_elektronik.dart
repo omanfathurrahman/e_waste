@@ -1,9 +1,10 @@
 import 'package:ewaste/screen/buang/detail/detail_buang_jenis_elektronik_screen.dart';
 import 'package:ewaste/screen/donasi/detail/detail_donasi_jenis_elektronik_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'get_svg_widget.dart';
+import '../component/get_svg_widget.dart';
 
 class GridJenisElektronik extends StatelessWidget {
   const GridJenisElektronik({
@@ -37,19 +38,11 @@ class GridJenisElektronik extends StatelessWidget {
               return InkWell(
                 splashColor: Colors.deepPurple[400],
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => (tipe == "buang")
-                          ? DetailBuangJenisElektronikScreen(
-                              jenisKategorisasi: item?['kategorisasi'],
-                              idJenisKategori: item?['id'],
-                            )
-                          : DetailDonasiJenisElektronikScreen(
-                              jenisKategorisasi: item?['kategorisasi'],
-                              idJenisKategori: item?['id']),
-                    ),
-                  );
+                  tipe == "buang"
+                      ? context.go(
+                          '/buang/detail/${item?['kategorisasi']}/${item?['id']}')
+                      : context.go(
+                          '/donasi/detail/${item?['kategorisasi']}/${item?['id']}');
                 },
                 child: ColoredBox(
                   color: Colors.white,

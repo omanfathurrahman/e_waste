@@ -4,6 +4,7 @@ import 'package:ewaste/screen/main_layout.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -240,12 +241,7 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditEmailScreen(),
-                                          ),
-                                        );
+                                        context.go('/profile/detail/edit/email');
                                       },
                                       child: SizedBox(
                                         width: double.infinity,
@@ -280,12 +276,7 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditAlamatScreen(),
-                                          ),
-                                        );
+                                        context.go('/profile/detail/edit/alamat');
                                       },
                                       child: SizedBox(
                                         width: double.infinity,
@@ -335,12 +326,7 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditPekerjaanScreen(),
-                                          ),
-                                        );
+                                        context.go('/profile/detail/edit/pekerjaan');
                                       },
                                       child: SizedBox(
                                         width: double.infinity,
@@ -403,13 +389,7 @@ class KomponenHeader extends StatelessWidget {
         BackButton(
           color: Colors.white,
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const MainLayout(
-                  curScreenIndex: 4,
-                ),
-              ),
-            );
+            context.go('/main-layout/4');
           },
         ),
         // const Text(

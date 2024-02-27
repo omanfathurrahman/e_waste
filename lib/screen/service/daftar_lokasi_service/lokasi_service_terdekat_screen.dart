@@ -2,6 +2,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:ewaste/screen/service/detail/detail_lokasi_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LokasiServiceTerdekatScreen extends StatefulWidget {
   const LokasiServiceTerdekatScreen({super.key, required this.idKecamatan});
@@ -56,15 +57,7 @@ class _LokasiServiceTerdekatScreenState extends State<LokasiServiceTerdekatScree
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () => {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailLokasiServiceScreen(
-                                    idKecamatan: widget.idKecamatan,
-                                    idServiceCenter: pilihan[index]['id'],
-                                  ),
-                                ),
-                              ),
+                              context.go('/service/list/${widget.idKecamatan}/${pilihan[index]['id']}'),
                             },
                             child: Card(
                               child: ListTile(
@@ -96,13 +89,7 @@ class KomponenHeader extends StatelessWidget {
     return Row(
       children: [
         BackButton(onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const MainLayout(
-                curScreenIndex: 3,
-              ),
-            ),
-          );
+          context.go('/main-layout/3');
         }),
         const Text(
           "Service Barang Elektronik",

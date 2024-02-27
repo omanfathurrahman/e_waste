@@ -1,6 +1,7 @@
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EditAlamatScreen extends StatefulWidget {
   const EditAlamatScreen({
@@ -100,11 +101,8 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
       _isLoading = false;
     });
     if (mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const DetailProfileScreen(),
-        ),
-      );
+      
+            context.go('/profile/detail');
     }
   }
 
@@ -319,11 +317,7 @@ class KomponenHeader extends StatelessWidget {
         BackButton(
           color: Colors.white,
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const DetailProfileScreen(),
-              ),
-            );
+            context.go('/profile/detail');
           },
         ),
         // const Text(

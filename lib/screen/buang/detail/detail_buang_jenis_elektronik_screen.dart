@@ -2,6 +2,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DetailBuangJenisElektronikScreen extends StatefulWidget {
   final String jenisKategorisasi;
@@ -20,7 +21,6 @@ class DetailBuangJenisElektronikScreen extends StatefulWidget {
 
 class _DetailBuangJenisElektronikScreenState
     extends State<DetailBuangJenisElektronikScreen> {
-  // final TextEditingController jumlahController = TextEditingController();
   String pilihanKategori = "";
   int jumlahBarang = 1;
   var userId = supabase.auth.currentUser!.id;
@@ -63,18 +63,13 @@ class _DetailBuangJenisElektronikScreenState
         },
       );
     }
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Berhasil ditambahkan ke keranjang"),
       ),
     );
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const MainLayout(
-          curScreenIndex: 1,
-        ),
-      ),
-    );
+    context.go('/main-layout/1');
   }
 
   @override
@@ -160,10 +155,7 @@ class KomponenHeader extends StatelessWidget {
         // ),
         BackButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const MainLayout(
-                      curScreenIndex: 1,
-                    )));
+            context.go('/main-layout/1');
           },
           color: Colors.white,
         ),

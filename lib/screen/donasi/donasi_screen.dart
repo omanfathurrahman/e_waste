@@ -1,4 +1,4 @@
-import 'package:ewaste/component/grid_jenis_elektronik.dart';
+import 'package:ewaste/screen/grid_jenis_elektronik.dart';
 import 'package:ewaste/component/icon_widget.dart';
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/donasi/keranjang/keranjang_donasi.dart';
