@@ -271,15 +271,15 @@ class _KeranjangBuangState extends State<KeranjangBuang> {
                               : const Text('Keranjang kosong'),
                           beratKeseluruhan != 0
                               ? FutureBuilder(
-                                  future: getTotalBerat(),
+                                  future: _getTotalJumlah(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     }
-                                    final totalBerat = snapshot.data!;
+                                    final totalJumlah = snapshot.data!;
                                     return Text(
-                                        "Jumlah poin yang akan anda dapatkan: ${totalBerat.toString()}");
+                                        "Jumlah poin yang akan anda dapatkan: ${totalJumlah.toString()}");
                                   })
                               : Container(),
                           const SizedBox(height: 20),
@@ -368,14 +368,14 @@ Future<num> hitungBeratKeseluruhan(
   return beratKeseluruhan;
 }
 
-Future<num> getTotalBerat() async {
+Future<num> _getTotalJumlah() async {
   final keranjangBuang = await supabase
       .from("keranjang_buang")
       .select()
       .eq("id_user", supabase.auth.currentUser?.id as Object);
-  num beratKeseluruhan = 0;
+  num jumlahKeseluruhan = 0;
   for (var item in keranjangBuang) {
-    beratKeseluruhan += item['jumlah'];
+    jumlahKeseluruhan += item['jumlah'];
   }
-  return beratKeseluruhan;
+  return jumlahKeseluruhan;
 }

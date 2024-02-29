@@ -3,6 +3,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_email/edit_email.dart';
+import 'package:ewaste/screen/profile/detail_profile/edit_nama/edit_nama.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -228,6 +229,46 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Nama lengkap",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditNamaScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1))),
+                                          child: Text(
+                                            data['nama_lengkap'],
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

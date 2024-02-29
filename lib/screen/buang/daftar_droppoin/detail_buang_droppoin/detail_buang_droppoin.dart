@@ -146,3 +146,16 @@ class KomponenHeader extends StatelessWidget {
     );
   }
 }
+
+Future<num> _getTotalJumlah() async {
+  final keranjangBuang = await supabase
+      .from("keranjang_buang")
+      .select()
+      .eq("id_user", supabase.auth.currentUser?.id as Object);
+  num jumlahKeseluruhan = 0;
+  for (var item in keranjangBuang) {
+    jumlahKeseluruhan += item['jumlah'];
+  }
+  return jumlahKeseluruhan;
+}
+
