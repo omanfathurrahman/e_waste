@@ -35,11 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: Form(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                Text('Masuk ke akunmu'),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
@@ -64,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: 'Masukkan Password',
                     labelText: 'Password',
                   ),
+                  obscureText: true,
                   validator: (String? value) {
                     return (value != null && value.contains('@'))
                         ? 'Do not use the @ char.'
@@ -77,7 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () => signIn(context),
                   child: const Text("Login"),
                 ),
+                SizedBox(height: 12,),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Belum punya akun?"),
                     TextButton(

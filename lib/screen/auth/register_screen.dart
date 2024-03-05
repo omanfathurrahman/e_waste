@@ -1,6 +1,7 @@
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/auth/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -48,11 +49,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           child: Form(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text('Sign Up', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                Text('Buat akunmu sekarang!'),
                 TextFormField(
                   controller: _fullnameController,
                   decoration: const InputDecoration(
@@ -111,16 +116,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 12,
                 ),
                 TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.phone),
+                    hintText: 'Masukkan No HP',
+                    labelText: 'No HP',
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.password),
                     hintText: 'Masukkan Password',
                     labelText: 'Password',
                   ),
-                  onSaved: (String? value) {
-                    // This optional block of code can be used to run
-                    // code when the user saves the form.
-                  },
+                  obscureText: true,
                   validator: (String? value) {
                     return (value != null && value.contains('@'))
                         ? 'Do not use the @ char.'
@@ -134,7 +151,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: signUp,
                   child: const Text("Register"),
                 ),
+                SizedBox(height: 12,),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Sudah punya akun?"),
                     TextButton(
