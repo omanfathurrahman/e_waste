@@ -17,7 +17,7 @@ class _DaftarDroppoinStateBuang extends State<DaftarDroppoinBuang> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DetailDonasiDroppoin(droppoinId: droppoinId),
+          builder: (context) => DetailBuangDroppoin(droppoinId: droppoinId),
         ));
     // print(droppoinId);
     // final keranjangBuang = await supabase
