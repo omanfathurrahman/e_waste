@@ -30,6 +30,10 @@ class KomponenHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Image.asset(
+          'assets/images/logo-b.png',
+          width: 40,
+        ),
         const Text(
           "Buang Sampah Elektronik",
           style: TextStyle(fontSize: 20, color: Colors.white),
