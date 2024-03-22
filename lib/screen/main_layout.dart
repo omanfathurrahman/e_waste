@@ -1,4 +1,3 @@
-
 import 'package:ewaste/component/icon_widget.dart';
 import 'package:ewaste/extention/to_capitalize.dart';
 import 'package:ewaste/screen/buang/buang_screen.dart';
@@ -88,7 +87,8 @@ class _MainLayoutState extends State<MainLayout> {
               });
             },
           ),
-        )
+        ),
+        
       ],
     );
   }
