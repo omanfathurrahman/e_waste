@@ -38,39 +38,39 @@ class _DetailBuangDroppoinState extends State<DetailBuangDroppoin> {
     return res;
   }
 
-  Future<void> _buangKeDroppoin({required num droppoinId}) async {
-    print(droppoinId);
-    final keranjangBuang = await supabase
-        .from("keranjang_buang")
+  Future<void> _donasiKeDroppoin({required num droppoinId}) async {
+    final keranjangDonasi = await supabase
+        .from("keranjang_donasi")
         .select()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-    await supabase.from("sampah_dibuang").insert({
+    await supabase.from("sampah_didonasikan").insert({
       "id_user": supabase.auth.currentUser?.id as Object,
       "droppoin_id": droppoinId,
       "pilihan_antar_jemput": 'diantar',
     });
-    final idSampahDibuangBaru = await supabase
-        .from("sampah_dibuang")
+    final idSampahDidonasikanBaru = await supabase
+        .from("sampah_didonasikan")
         .select()
         .order("id", ascending: false)
         .limit(1)
         .single();
-    for (var item in keranjangBuang) {
-      await supabase.from("detail_sampah_dibuang").insert([
+    for (var item in keranjangDonasi) {
+      await supabase.from("detail_sampah_didonasikan").insert([
         {
           "id_jenis_elektronik": item['id_jenis_elektronik'],
           "jumlah": item['jumlah'],
           "kategorisasi": item['kategorisasi'],
-          "id_sampah_dibuang": idSampahDibuangBaru['id'],
+          "id_sampah_didonasikan": idSampahDidonasikanBaru['id'],
         }
       ]);
     }
     await supabase
-        .from("keranjang_buang")
+        .from("keranjang_donasi")
         .delete()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Silahkan bawa ke drop poin tersebut"),
@@ -109,7 +109,7 @@ class _DetailBuangDroppoinState extends State<DetailBuangDroppoin> {
             ),
             ElevatedButton(
               onPressed: () {
-                _buangKeDroppoin(droppoinId: widget.droppoinId);
+                _donasiKeDroppoin(droppoinId: widget.droppoinId);
               },
               child: const Text("Bawa ke drop poin"),
             )
@@ -137,25 +137,20 @@ class KomponenHeader extends StatelessWidget {
             );
           },
         ),
-        // const Text(
-        //   "Keranjang Buang",
-        //   style: TextStyle(
-        //       fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
-        // ),
       ],
     );
   }
 }
 
-Future<num> _getTotalJumlah() async {
-  final keranjangBuang = await supabase
-      .from("keranjang_buang")
-      .select()
-      .eq("id_user", supabase.auth.currentUser?.id as Object);
-  num jumlahKeseluruhan = 0;
-  for (var item in keranjangBuang) {
-    jumlahKeseluruhan += item['jumlah'];
-  }
-  return jumlahKeseluruhan;
-}
+// Future<num> _getTotalJumlah() async {
+//   final keranjangDonasi = await supabase
+//       .from("keranjang_donasi")
+//       .select()
+//       .eq("id_user", supabase.auth.currentUser?.id as Object);
+//   num jumlahKeseluruhan = 0;
+//   for (var item in keranjangDonasi) {
+//     jumlahKeseluruhan += item['jumlah'];
+//   }
+//   return jumlahKeseluruhan;
+// }
 
