@@ -4,6 +4,8 @@ import 'package:ewaste/screen/main_layout.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_alamat/edit_alamat.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_email/edit_email.dart';
 import 'package:ewaste/screen/profile/detail_profile/edit_nama/edit_nama.dart';
+import 'package:ewaste/utils/get_alamat_lengkap.dart';
+import 'package:ewaste/utils/get_pekerjaan.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,48 +31,12 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
     super.initState();
   }
 
-  Future<String> _getAlamatLengkap() async {
-    final alamatRes = await supabase
-        .from('profile')
-        .select('alamat_id, detail_alamat')
-        .eq('id', userId)
-        .single()
-        .limit(1);
-
-    print(alamatRes);
-
-    final alamatDropdownRes = await supabase
-        .from('daftar_alamat')
-        .select('kabupaten_kota, kecamatan, kelurahan_desa')
-        .eq('id', alamatRes['alamat_id'])
-        .single()
-        .limit(1);
-
-    print(alamatDropdownRes);
-    return "${alamatRes['detail_alamat']}, ${alamatDropdownRes['kelurahan_desa']}, ${alamatDropdownRes['kecamatan']}, ${alamatDropdownRes['kabupaten_kota']}";
-  }
 
   Future<Map<String, dynamic>> _getUser(id) async {
     final response =
         await supabase.from('profile').select().eq('id', id).single().limit(1);
 
     return response;
-  }
-
-  Future<String> _getPekerjaan() async {
-    final pekerjaanId = (await supabase
-        .from('profile')
-        .select('pekerjaan_id')
-        .eq('id', userId)
-        .single()
-        .limit(1))['pekerjaan_id'];
-    final namaPekerjaan = (await supabase
-        .from('daftar_pekerjaan')
-        .select('nama')
-        .eq('id', pekerjaanId)
-        .single()
-        .limit(1))['nama'];
-    return namaPekerjaan as String;
   }
 
   Future<void> _uploadProfilePic() async {
@@ -167,52 +133,50 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  data['nama_lengkap'],
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _uploadProfilePic();
-                                  },
-                                  child: Container(
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: _isLoading
-                                        ? const SizedBox(
-                                            width: 80,
-                                            height: 80,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.blue,
-                                            ),
-                                          )
-                                        : ((data['img_url'] is String)
-                                            ? Image.network(
-                                                data['img_url'],
-                                                width: 80,
-                                                height: 80,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                'https://oexltokstwraweaozqav.supabase.co/storage/v1/object/public/avatars/default.webp?t=2024-02-09T13%3A54%3A15.630Z',
-                                                width: 80,
-                                                height: 80,
-                                                fit: BoxFit.cover,
-                                              )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data['nama_lengkap'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _uploadProfilePic();
+                                },
+                                child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                )
-                              ],
-                            ),
+                                  child: _isLoading
+                                      ? const SizedBox(
+                                          width: 80,
+                                          height: 80,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.blue,
+                                          ),
+                                        )
+                                      : ((data['img_url'] is String)
+                                          ? Image.network(
+                                              data['img_url'],
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.network(
+                                              'https://oexltokstwraweaozqav.supabase.co/storage/v1/object/public/avatars/default.webp?t=2024-02-09T13%3A54%3A15.630Z',
+                                              width: 80,
+                                              height: 80,
+                                              fit: BoxFit.cover,
+                                            )),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                         const SizedBox(
@@ -337,11 +301,11 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                                       color: Colors.black,
                                                       width: 1))),
                                           child: FutureBuilder(
-                                              future: _getAlamatLengkap(),
+                                              future: getAlamatLengkap(),
                                               builder: (context, snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
-                                                    "Loading...",
+                                                    "Alamat belum diatur",
                                                     style: TextStyle(
                                                       fontSize: 18,
                                                       color: Colors.black,
@@ -392,7 +356,7 @@ class _DetailProfileScreenState extends State<DetailProfileScreen> {
                                                       color: Colors.black,
                                                       width: 1))),
                                           child: FutureBuilder(
-                                              future: _getPekerjaan(),
+                                              future: getPekerjaan(),
                                               builder: (context, snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return const Text(
