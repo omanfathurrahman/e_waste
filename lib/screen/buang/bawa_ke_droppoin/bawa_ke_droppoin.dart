@@ -106,14 +106,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
     super.dispose();
   }
 
-  // Future<void> _inisializeData() async {
-  //   final alamat = await _getUserAlamat(userId);
-  //   _kabupatenKotaController.text = alamat['kabupaten_kota'];
-  //   _kecamatanController.text = alamat['kecamatan'];
-  //   _kelurahanDesaController.text = alamat['kelurahan_desa'];
-  //   _getAllKecamatan();
-  // }
-
   Future<Map<String, dynamic>> _getUserAlamat(id) async {
     final alamat = await supabase
         .from('profile')
@@ -135,26 +127,26 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
     return alamat;
   }
 
-  Future<void> _updateSelectedAlamat() async {
-    setState(() {
-      // _isLoading = true;
-    });
-    var selectedAlamatId = await supabase
-        .from('daftar_alamat')
-        .select('id')
-        .eq('kabupaten_kota', _kabupatenKotaController.text)
-        .eq('kecamatan', _kecamatanController.text)
-        .eq('kelurahan_desa', _kelurahanDesaController.text)
-        .single()
-        .limit(1);
+  // Future<void> _updateSelectedAlamat() async {
+  //   setState(() {
+  //     // _isLoading = true;
+  //   });
+  //   var selectedAlamatId = await supabase
+  //       .from('daftar_alamat')
+  //       .select('id')
+  //       .eq('kabupaten_kota', _kabupatenKotaController.text)
+  //       .eq('kecamatan', _kecamatanController.text)
+  //       .eq('kelurahan_desa', _kelurahanDesaController.text)
+  //       .single()
+  //       .limit(1);
 
-    await supabase.from('profile').update({
-      'alamat_id': selectedAlamatId['id'],
-    }).eq('id', userId);
-    setState(() {
-      // _isLoading = false;
-    });
-  }
+  //   await supabase.from('profile').update({
+  //     'alamat_id': selectedAlamatId['id'],
+  //   }).eq('id', userId);
+  //   setState(() {
+  //     // _isLoading = false;
+  //   });
+  // }
 
   Future<void> _getAllKecamatan() async {
     final kecamatan = await supabase
@@ -183,9 +175,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
     _kabupatenKotaController.text = alamat['kabupaten_kota'];
     _kecamatanController.text = alamat['kecamatan'];
     _kelurahanDesaController.text = alamat['kelurahan_desa'];
-    print(_kabupatenKotaController.text);
-    print(_kecamatanController.text);
-    print(_kelurahanDesaController.text);
   }
 
   Future<void> _onSelectedAturUlangAlamat() async {
@@ -195,7 +184,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
   }
 
   Future<num> _getSelectedAlamatId() async {
-    print(_kelurahanDesaController);
     final selectedAlamatId = await supabase
         .from('daftar_alamat')
         .select('id, kabupaten_kota, kecamatan, kelurahan_desa')
@@ -204,8 +192,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
         .eq('kelurahan_desa', _kelurahanDesaController.text)
         .single()
         .limit(1);
-
-    print(selectedAlamatId);
 
     return selectedAlamatId['id'] as num;
   }
@@ -236,7 +222,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
                   _pilihanAlamat = value as PilihanAlamat;
                   _onSelectedCurAlamat();
                 });
-                print(_pilihanAlamat);
               },
             ),
             RadioListTile(
@@ -251,7 +236,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
                   _onSelectedAturUlangAlamat();
                   _pilihanAlamat = value as PilihanAlamat;
                 });
-                print(_pilihanAlamat);
               },
             ),
           ],
@@ -277,7 +261,6 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
                       return DropdownMenu(
                           onSelected: (value) {
                             _getAllKecamatan();
-                            print(_kabupatenKotaController.text);
                           },
                           controller: _kabupatenKotaController,
                           expandedInsets: EdgeInsets.zero,
@@ -293,9 +276,7 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
                       style: TextStyle(color: Colors.black)),
                   DropdownMenu(
                     onSelected: (value) {
-                      print(value);
                       _getAllKelurahanDesa();
-                      print(_kecamatanController.text);
                     },
                     enableFilter: true,
                     controller: _kecamatanController,
