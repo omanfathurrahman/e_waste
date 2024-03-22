@@ -1,5 +1,5 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/service/daftar_lokasi_service/lokasi_service_terdekat_screen.dart';
 import 'package:flutter/material.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -15,10 +15,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
     alamat = TextEditingController();
-    alamat.addListener(() {
-      final text = alamat.value.text;
-      print(text);
-    });
     super.initState();
   }
 
@@ -43,9 +39,14 @@ class KomponenHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Text(
+        Image.asset(
+          'assets/images/logo-b.png',
+          width: 40,
+        ),
+        const SizedBox(width: 16), 
+        const Text(
           "Service Barang Elektronik",
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
@@ -94,7 +95,7 @@ class _KomponenAlamatState extends State<KomponenAlamat> {
               onSelected: (value) {
                 widget.alamat.text = value.toString();
               },
-              controller: widget.alamat,
+              // controller: widget.alamat,
               textStyle: const TextStyle(color: Colors.white),
               inputDecorationTheme: const InputDecorationTheme(
                 focusedBorder: OutlineInputBorder(

@@ -1,5 +1,5 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class EditPekerjaanScreen extends StatefulWidget {
@@ -62,8 +62,7 @@ class _EditPekerjaanScreenState extends State<EditPekerjaanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(children: [
+    return  Stack(children: [
         Container(
           width: double.infinity,
           height: double.infinity,
@@ -143,7 +142,7 @@ class _EditPekerjaanScreenState extends State<EditPekerjaanScreen> {
                     )
                   ],
                 )))
-      ]),
+      ],
     );
   }
 }

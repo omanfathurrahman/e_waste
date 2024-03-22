@@ -1,4 +1,4 @@
-name: e_waste
+name: ewaste
 description: A new Flutter project.
 publish_to: 'none'
 version: 0.1.0
@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.9
   image_picker: ^1.0.7
+  intl: ^0.19.0
   supabase_flutter: ^2.1.0
 
 dev_dependencies:
@@ -31,5 +32,7 @@ flutter:
     - assets/icons/basket.svg
     - assets/images/143035475_1029718927553677_5869815052519506947_n2.png
     - assets/images/iklan.png
+    - assets/images/logo.png
+    - assets/images/logo-b.png
     - assets/images/143035475_1029718927553677_5869815052519506947_n1.png
   

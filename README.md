@@ -1,3 +1,3 @@
-# e_waste
+# ewaste
 
 A new Flutter project.

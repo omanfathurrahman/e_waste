@@ -1,7 +1,7 @@
-import 'package:e_waste/component/grid_jenis_elektronik.dart';
-import 'package:e_waste/component/icon_widget.dart';
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/donasi/keranjang/keranjang_donasi.dart';
+import 'package:ewaste/component/grid_jenis_elektronik.dart';
+import 'package:ewaste/component/icon_widget.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/donasi/keranjang/keranjang_donasi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -30,6 +30,10 @@ class KomponenHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Image.asset(
+          'assets/images/logo-b.png',
+          width: 40,
+        ),
         const Text(
           "Donasi Sampah Elektronik",
           style: TextStyle(fontSize: 20, color: Colors.white),

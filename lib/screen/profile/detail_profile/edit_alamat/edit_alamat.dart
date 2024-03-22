@@ -1,14 +1,9 @@
-import 'dart:ui';
-
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditAlamatScreen extends StatefulWidget {
-  const EditAlamatScreen({
-    super.key,
-  });
+  const EditAlamatScreen({super.key});
 
   @override
   State<EditAlamatScreen> createState() => _EditAlamatScreenState();
@@ -32,7 +27,6 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
   void initState() {
     userId = supabase.auth.currentUser!.id;
     _inisializeData();
-    _getAlamatOption();
     super.initState();
   }
 
@@ -46,19 +40,35 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
 
   Future<void> _inisializeData() async {
     final alamat = await _getUserAlamat(userId);
-    _kabupatenKotaController.text = alamat['kabupaten_kota'];
-    _kecamatanController.text = alamat['kecamatan'];
-    _kelurahanDesaController.text = alamat['kelurahan_desa'];
-    _getAllKecamatan();
+    print(alamat);
+    print(alamat != null);
+    if (alamat != null) {
+      _kabupatenKotaController.text = alamat['kabupaten_kota'];
+      _kecamatanController.text = alamat['kecamatan'];
+      _kelurahanDesaController.text = alamat['kelurahan_desa'];
+      _jalanController.text = alamat['detail_alamat'];
+      _getAllKecamatan();
+
+      print("tessssss");
+    } else {
+      print("tessssss222");
+      _kabupatenKotaController.text = '';
+      _kecamatanController.text = '';
+      _kelurahanDesaController.text = '';
+      _jalanController.text = '';
+    }
   }
 
-  Future<Map<String, dynamic>> _getUserAlamat(id) async {
+  Future<Map<String, dynamic>?> _getUserAlamat(id) async {
     final alamat = await supabase
         .from('profile')
         .select('alamat_id, detail_alamat')
         .eq('id', id)
         .single()
         .limit(1);
+    if (alamat['alamat_id'] == null) {
+      return null;
+    }
     final detailAlamat = await supabase
         .from('daftar_alamat')
         .select()
@@ -69,11 +79,10 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
     return detailAlamat;
   }
 
-  Future<List<Map<String, dynamic>>> _getAlamatOption() async {
-    final alamat =
-        await supabase.from('daftar_alamat').select();
-    return alamat;
-  }
+  // Future<List<Map<String, dynamic>>> _getAlamatOption() async {
+  //   final alamat = await supabase.from('daftar_alamat').select();
+  //   return alamat;
+  // }
 
   Future<void> _updateSelectedAlamat() async {
     setState(() {
@@ -92,9 +101,24 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
       'alamat_id': selectedAlamatId['id'],
       'detail_alamat': _jalanController.text
     }).eq('id', userId);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Alamat berhasil diubah"),
+        ),
+      );
+    }
     setState(() {
       _isLoading = false;
     });
+    if (mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const DetailProfileScreen(),
+        ),
+      );
+    }
   }
 
   Future<void> _getAllKecamatan() async {
@@ -129,7 +153,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          final alamat = snapshot.data!;
+          final alamat = snapshot.data;
 
           return MaterialApp(
             home: Stack(
@@ -164,7 +188,9 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -207,7 +233,7 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
                                                     _kabupatenKotaController,
                                                 expandedInsets: EdgeInsets.zero,
                                                 initialSelection:
-                                                    alamat['kabupaten_kota'],
+                                                    alamat?['kabupaten_kota'],
                                                 dropdownMenuEntries:
                                                     kabupatenKota
                                                         .map((e) =>
@@ -228,10 +254,14 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
                                           enableFilter: true,
                                           controller: _kecamatanController,
                                           expandedInsets: EdgeInsets.zero,
-                                          initialSelection: alamat['kecamatan'],
+                                          initialSelection: alamat?['kecamatan'],
                                           dropdownMenuEntries: curListKecamatan
-                                              .map((e) => DropdownMenuEntry(
-                                                  value: e, label: e))
+                                              .map(
+                                                (e) => DropdownMenuEntry(
+                                                  value: e,
+                                                  label: e,
+                                                ),
+                                              )
                                               .toList(),
                                         ),
                                         const SizedBox(
@@ -241,11 +271,15 @@ class _EditAlamatScreenState extends State<EditAlamatScreen> {
                                           controller: _kelurahanDesaController,
                                           expandedInsets: EdgeInsets.zero,
                                           initialSelection:
-                                              alamat['kelurahan_desa'],
+                                              alamat?['kelurahan_desa'],
                                           dropdownMenuEntries:
                                               curListKelurahanDesa
-                                                  .map((e) => DropdownMenuEntry(
-                                                      value: e, label: e))
+                                                  .map(
+                                                    (e) => DropdownMenuEntry(
+                                                      value: e,
+                                                      label: e,
+                                                    ),
+                                                  )
                                                   .toList(),
                                         ),
                                       ],
@@ -315,19 +349,13 @@ class KomponenHeader extends StatelessWidget {
             );
           },
         ),
-        // const Text(
-        //   "Profile",
-        //   style: TextStyle(
-        //       fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
-        // ),
       ],
     );
   }
 }
 
 Future<List<dynamic>> _getAllKabupatenKota() async {
-  final kabupatenKota = await supabase
-      .from('daftar_alamat')
-      .select('kabupaten_kota');
+  final kabupatenKota =
+      await supabase.from('daftar_alamat').select('kabupaten_kota');
   return kabupatenKota.map((item) => item['kabupaten_kota']).toSet().toList();
 }

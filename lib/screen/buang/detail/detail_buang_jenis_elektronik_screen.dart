@@ -1,6 +1,6 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/main_layout.dart';
-import 'package:e_waste/utils/hitung_berat.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/main_layout.dart';
+import 'package:ewaste/utils/hitung_berat.dart';
 import 'package:flutter/material.dart';
 
 class DetailBuangJenisElektronikScreen extends StatefulWidget {
@@ -29,14 +29,12 @@ class _DetailBuangJenisElektronikScreenState
     setState(() {
       pilihanKategori = pilihan;
     });
-    print("jenis kategori: $pilihanKategori");
   }
 
   void gantiJumlah(int jumlah) {
     setState(() {
       jumlahBarang = jumlah;
     });
-    print("jumlah barang: $jumlahBarang");
   }
 
   Future<void> tambahKeKeranjang() async {
@@ -63,8 +61,9 @@ class _DetailBuangJenisElektronikScreenState
         },
       );
     }
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text("Berhasil ditambahkan ke keranjang"),
       ),
     );
@@ -79,70 +78,68 @@ class _DetailBuangJenisElektronikScreenState
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(children: [
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(0.00, 1.00),
-              end: Alignment(0, -1),
-              colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
-            ),
+    return Stack(children: [
+      Container(
+        width: double.infinity,
+        height: double.infinity,
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, 1.00),
+            end: Alignment(0, -1),
+            colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
           ),
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-            child: ListView(
-              children: switch (widget.jenisKategorisasi) {
-                "none" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(
-                      gantiJumlah: gantiJumlah,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                "kecil_sedang_besar" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenUkuranBarang(
-                      idJenisKategori: widget.idJenisKategori,
-                      gantiPilihan: gantiPilihan,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(
-                      gantiJumlah: gantiJumlah,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                "pilihan" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenDropdown(
-                      idJenisKategori: widget.idJenisKategori,
-                      gantiPilihan: gantiPilihan,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(
-                      gantiJumlah: gantiJumlah,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                _ => []
-              },
-            ),
+      ),
+      Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+          child: ListView(
+            children: switch (widget.jenisKategorisasi) {
+              "none" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(
+                    gantiJumlah: gantiJumlah,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              "kecil_sedang_besar" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenUkuranBarang(
+                    idJenisKategori: widget.idJenisKategori,
+                    gantiPilihan: gantiPilihan,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(
+                    gantiJumlah: gantiJumlah,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              "pilihan" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenDropdown(
+                    idJenisKategori: widget.idJenisKategori,
+                    gantiPilihan: gantiPilihan,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(
+                    gantiJumlah: gantiJumlah,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              _ => []
+            },
           ),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }
 
@@ -177,7 +174,7 @@ class KomponenHeader extends StatelessWidget {
 }
 
 class KomponenUkuranBarang extends StatefulWidget {
-  KomponenUkuranBarang(
+  const KomponenUkuranBarang(
       {super.key, required this.idJenisKategori, required this.gantiPilihan});
   final Function(String pilihan) gantiPilihan;
   final int idJenisKategori;
@@ -360,7 +357,7 @@ class KomponenJumlahBarang extends StatelessWidget {
 }
 
 class KomponenTombol extends StatelessWidget {
-  KomponenTombol({super.key, required this.tambahKeKeranjang});
+  const KomponenTombol({super.key, required this.tambahKeKeranjang});
   final Function() tambahKeKeranjang;
 
   @override

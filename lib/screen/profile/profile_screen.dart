@@ -1,6 +1,13 @@
-import 'package:e_waste/main.dart';
-import 'package:e_waste/screen/auth/login_screen.dart';
-import 'package:e_waste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/main.dart';
+import 'package:ewaste/screen/auth/login_screen.dart';
+import 'package:ewaste/screen/profile/detail_profile/detail_profile_screen.dart';
+import 'package:ewaste/screen/profile/faq/faq.dart';
+import 'package:ewaste/screen/profile/kritik_saran/kritik_saran.dart';
+import 'package:ewaste/screen/profile/privasi_keamanan/privasi_keamanan.dart';
+import 'package:ewaste/screen/profile/riwayat_buang_donasi/riwayat_buang_donasi.dart';
+import 'package:ewaste/utils/get_alamat_lengkap.dart';
+import 'package:ewaste/utils/get_pekerjaan.dart';
+import 'package:ewaste/utils/get_user.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,7 +21,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String userId;
   @override
   void initState() {
-    // TODO: implement initState
     userId = supabase.auth.currentUser!.id;
 
     super.initState();
@@ -22,37 +28,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Stack(
       children: [
-        const Text(
-          "Profile",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 22),
+        ListView(
+          children: [
+            const Text(
+              "Profile",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white, fontSize: 22),
+            ),
+            const SizedBox(height: 16),
+            KomponenProfile(userId: userId),
+            const SizedBox(height: 16),
+            KomponenPoin(userId: userId),
+            const SizedBox(height: 16),
+            const KomponenMenu(),
+            const SizedBox(height: 16),
+            const KomponenLogout(),
+          ],
         ),
-        const SizedBox(height: 16),
-        KomponenProfile(userId: userId),
-        const SizedBox(height: 16),
-        KomponenPoin(userId: userId),
-        const SizedBox(height: 16),
-        const KomponenMenu(),
-        const SizedBox(height: 16),
-        const KomponenLogout(),
+      Positioned(
+          top: 0,
+          left: 0,
+          child: Image.asset("assets/images/logo-b.png", width: 60, height: 60),
+        ),
       ],
     );
   }
 }
 
 class KomponenProfile extends StatelessWidget {
-  KomponenProfile({super.key, required this.userId});
+  const KomponenProfile({super.key, required this.userId});
   final String? userId;
 
   Future<Map<String, dynamic>> getUser(id) async {
-    final response = await supabase
-        .from('profile')
-        .select()
-        .eq('id', id)
-        .single()
-        .limit(1);
+    final response =
+        await supabase.from('profile').select().eq('id', id).single().limit(1);
 
     return response;
   }
@@ -90,19 +101,38 @@ class KomponenProfile extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               const SizedBox(height: 6),
-              Text(
-                (data['pekerjaan'] is String)
-                    ? data['pekerjaan']
-                    : 'Pekerjaan belum diisi',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+              FutureBuilder(
+                future: getPekerjaan(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text("Pekerjaan belum diatur"),
+                    );
+                  }
+                  final data = snapshot.data;
+                  return Text(
+                    data!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  );
+                },
               ),
               const SizedBox(height: 2),
-              Text(
-                (data['alamat'] is String)
-                    ? data['alamat']
-                    : 'Alamat belum diisi',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              FutureBuilder(
+                future: getAlamatLengkap(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text("Alamat belum diatur", style: TextStyle(color: Colors.white),),
+                    );
+                  }
+                  final data = snapshot.data;
+                  return Text(
+                    data!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  );
+                },
+              )
             ],
           );
         });
@@ -112,17 +142,6 @@ class KomponenProfile extends StatelessWidget {
 class KomponenPoin extends StatelessWidget {
   const KomponenPoin({super.key, required this.userId});
   final String userId;
-
-  Future<Map<String, dynamic>> getUser(id) async {
-    final response = await supabase
-        .from('profile')
-        .select()
-        .eq('id', id)
-        .single()
-        .limit(1);
-
-    return response;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +182,13 @@ class KomponenPoin extends StatelessWidget {
                   const SizedBox(width: 32),
                   Column(
                     children: [
-                      Text(
+                      const Text(
                         "Status",
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         data['status'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: Colors.white),
@@ -201,7 +220,7 @@ class KomponenMenu extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const DetailProfileScreen()));
@@ -220,7 +239,10 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RiwayatBuangDonasi()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -236,7 +258,8 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => const FaqScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -252,7 +275,8 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => const KritikSaranScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
@@ -268,7 +292,10 @@ class KomponenMenu extends StatelessWidget {
             const Divider(height: 1.0),
             InkWell(
               onTap: () {
-                print("fdaf");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PrivasiKeamananScreen()));
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
