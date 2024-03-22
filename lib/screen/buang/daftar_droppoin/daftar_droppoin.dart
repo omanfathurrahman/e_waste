@@ -14,10 +14,10 @@ class DaftarDroppoinBuang extends StatefulWidget {
 
 class _DaftarDroppoinStateBuang extends State<DaftarDroppoinBuang> {
   Future<void> _buangKeDroppoin({required num droppoinId}) async {
-    Navigator.pushReplacement(
+    Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DetailBuangDroppoin(droppoinId: droppoinId),
+          builder: (context) => DetailDonasiDroppoin(droppoinId: droppoinId),
         ));
     // print(droppoinId);
     // final keranjangBuang = await supabase
@@ -119,7 +119,6 @@ class _DaftarDroppoinStateBuang extends State<DaftarDroppoinBuang> {
 Future<List<Map<String, dynamic>>> _getDroppoinList({required num id}) async {
   final response =
       await supabase.from('daftar_droppoin').select().eq('alamat_id', id);
-  print(response);
   return response;
 }
 
