@@ -62,8 +62,7 @@ class _EditPekerjaanScreenState extends State<EditPekerjaanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(children: [
+    return  Stack(children: [
         Container(
           width: double.infinity,
           height: double.infinity,
@@ -143,7 +142,7 @@ class _EditPekerjaanScreenState extends State<EditPekerjaanScreen> {
                     )
                   ],
                 )))
-      ]),
+      ],
     );
   }
 }
