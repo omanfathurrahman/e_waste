@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (!context.mounted) return;
     // Redirect to the main layout
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const MainLayout(curScreenIndex: 0),
@@ -33,75 +33,81 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-                Text('Masuk ke akunmu'),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: 'Masukkan email',
-                    labelText: 'Email',
+    return Scaffold(
+      appBar: AppBar(automaticallyImplyLeading: false,),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: Form(
+          child: ListView(
+            shrinkWrap: true,
+            reverse: true,
+            children: [
+              Image.asset('assets/images/logo.png', width: 130, height: 130), 
+              const Text(
+                'Login',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+              const Text('Masuk ke akunmu',textAlign: TextAlign.center,),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.person),
+                  hintText: 'Masukkan email',
+                  labelText: 'Email',
+                ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required.';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Invalid email format.';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.person),
+                  hintText: 'Masukkan Password',
+                  labelText: 'Password',
+                ),
+                obscureText: true,
+                validator: (String? value) {
+                  return (value != null && value.contains('@'))
+                      ? 'Do not use the @ char.'
+                      : null;
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              ElevatedButton(
+                onPressed: () => signIn(context),
+                child: const Text("Login"),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Belum punya akun?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text("Register"),
                   ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email is required.';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Invalid email format.';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: 'Masukkan Password',
-                    labelText: 'Password',
-                  ),
-                  obscureText: true,
-                  validator: (String? value) {
-                    return (value != null && value.contains('@'))
-                        ? 'Do not use the @ char.'
-                        : null;
-                  },
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                ElevatedButton(
-                  onPressed: () => signIn(context),
-                  child: const Text("Login"),
-                ),
-                SizedBox(height: 12,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Belum punya akun?"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text("Register"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                ],
+              ),
+            ].reversed.toList(),
           ),
         ),
       ),
