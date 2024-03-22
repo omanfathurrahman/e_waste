@@ -27,7 +27,7 @@ Future<num> beratJenisElektronik({
         .limit(1);
     berat = berat2[0]['berat'];
   } else if (jenisElektronik['kategorisasi'] == "kecil_sedang_besar") {
-    print(label);
+
     var berat2 = await Supabase.instance.client
         .from("kategorisasi_kecilsedangbesar")
         .select(label)
