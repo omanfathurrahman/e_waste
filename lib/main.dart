@@ -1,4 +1,4 @@
-import 'package:ewaste/screen/splash_screen.dart';
+import 'package:ewaste/screen/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -22,7 +22,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      home: LandingPage(),
     );
   }
 }
