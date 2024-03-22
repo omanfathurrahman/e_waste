@@ -3,9 +3,8 @@ import 'dart:ffi';
 import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/default.dart';
 import 'package:ewaste/screen/main_layout.dart';
-import 'package:ewaste/screen/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:ewaste/utils/format_date.dart';
 
 class RiwayatBuangDonasi extends StatefulWidget {
   const RiwayatBuangDonasi({super.key});
@@ -18,12 +17,6 @@ class _RiwayatBuangDonasiState extends State<RiwayatBuangDonasi> {
   // Data
   String _curScreen = "buang";
   bool _isLoading = false;
-
-  @override
-  initState() {
-    _getAllBuang();
-    super.initState();
-  }
 
   // Function
   Future<List<Map<String, dynamic>>> _getAllBuang() async {
@@ -40,12 +33,6 @@ class _RiwayatBuangDonasiState extends State<RiwayatBuangDonasi> {
         .select()
         .eq("id_user", supabase.auth.currentUser!.id);
     return dataBuang;
-  }
-
-  String _formatDate(String date) {
-    final DateTime dateTime = DateTime.parse(date);
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
-    return formatter.format(dateTime);
   }
 
   @override
@@ -135,100 +122,110 @@ class _RiwayatBuangDonasiState extends State<RiwayatBuangDonasi> {
           Container(
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(8)),
-            child: (_isLoading)? const Text("Loading...", textAlign: TextAlign.center,)  : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _curScreen == "buang"
-                  ? FutureBuilder(
-                      future: _getAllBuang(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        }
-                        final listBuang =
-                            snapshot.data as List<Map<String, dynamic>>;
-                        return Column(
-                            children: listBuang
-                                .map(
-                                  (buangItem) => Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Buang",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              Text(_formatDate(
-                                                  buangItem['created_at'])),
-                                            ],
+            child: (_isLoading)
+                ? const Text(
+                    "Loading...",
+                    textAlign: TextAlign.center,
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _curScreen == "buang"
+                        ? FutureBuilder(
+                            future: _getAllBuang(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const CircularProgressIndicator();
+                              }
+                              final listBuang =
+                                  snapshot.data as List<Map<String, dynamic>>;
+                              return Column(
+                                  children: listBuang
+                                      .map(
+                                        (buangItem) => Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      "Buang",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    Text(formatDate(buangItem[
+                                                        'created_at'])),
+                                                  ],
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    print('tes');
+                                                  },
+                                                  child: const Text(
+                                                      "Lihat Detail"),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          TextButton(
-                                              onPressed: () {
-                                                print('tes');
-                                              },
-                                              child: const Text("Lihat Detail"))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList());
-                      },
-                    )
-                  : FutureBuilder(
-                      future: _getAllDonasi(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        }
-                        final listBuang =
-                            snapshot.data as List<Map<String, dynamic>>;
-                        return Column(
-                            children: listBuang
-                                .map(
-                                  (buangItem) => Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Donasi",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              Text(_formatDate(
-                                                  buangItem['created_at'])),
-                                            ],
+                                        ),
+                                      )
+                                      .toList());
+                            },
+                          )
+                        : FutureBuilder(
+                            future: _getAllDonasi(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const CircularProgressIndicator();
+                              }
+                              final listBuang =
+                                  snapshot.data as List<Map<String, dynamic>>;
+                              return Column(
+                                  children: listBuang
+                                      .map(
+                                        (buangItem) => Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      "Donasi",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    Text(formatDate(buangItem[
+                                                        'created_at'])),
+                                                  ],
+                                                ),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      print('tes');
+                                                    },
+                                                    child: const Text(
+                                                        "Lihat Detail"))
+                                              ],
+                                            ),
                                           ),
-                                          TextButton(
-                                              onPressed: () {
-                                                print('tes');
-                                              },
-                                              child: const Text("Lihat Detail"))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList());
-                      },
-                    ),
-            ),
+                                        ),
+                                      )
+                                      .toList());
+                            },
+                          ),
+                  ),
           )
         ],
       ),
