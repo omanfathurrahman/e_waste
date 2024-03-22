@@ -15,10 +15,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
     alamat = TextEditingController();
-    alamat.addListener(() {
-      final text = alamat.value.text;
-      print(text);
-    });
     super.initState();
   }
 
@@ -43,9 +39,14 @@ class KomponenHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Text(
+        Image.asset(
+          'assets/images/logo-b.png',
+          width: 40,
+        ),
+        const SizedBox(width: 16), 
+        const Text(
           "Service Barang Elektronik",
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
