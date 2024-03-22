@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Default extends StatelessWidget {
-  const Default({super.key, required this.child});
+  const Default({super.key, required this.child, this.appBar});
   final Widget child;
+  final AppBar? appBar;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class Default extends StatelessWidget {
           ),
         ),
         Scaffold(
+          appBar: appBar,
           backgroundColor: Colors.transparent,
           body: Padding(
             padding: const EdgeInsets.symmetric(
