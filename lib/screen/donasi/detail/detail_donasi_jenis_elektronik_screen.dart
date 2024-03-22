@@ -29,14 +29,12 @@ class _DetailDonasiJenisElektronikScreenState
     setState(() {
       pilihanKategori = pilihan;
     });
-    print("jenis kategori: $pilihanKategori");
   }
 
   void gantiJumlah(int jumlah) {
     setState(() {
       jumlahBarang = jumlah;
     });
-    print("jumlah barang: $jumlahBarang");
   }
 
   Future<void> tambahKeKeranjang() async {
@@ -61,6 +59,7 @@ class _DetailDonasiJenisElektronikScreenState
             jumlahBarang
       });
     }
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Berhasil ditambahkan ke keranjang"),
@@ -77,63 +76,61 @@ class _DetailDonasiJenisElektronikScreenState
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(children: [
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(0.00, 1.00),
-              end: Alignment(0, -1),
-              colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
-            ),
+    return Stack(children: [
+      Container(
+        width: double.infinity,
+        height: double.infinity,
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, 1.00),
+            end: Alignment(0, -1),
+            colors: [Color(0xFFE9EBFF), Color(0xFF8B97FF)],
           ),
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-            child: ListView(
-              children: switch (widget.jenisKategorisasi) {
-                "none" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(gantiJumlah: gantiJumlah),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                "kecil_sedang_besar" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenUkuranBarang(
+      ),
+      Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+          child: ListView(
+            children: switch (widget.jenisKategorisasi) {
+              "none" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(gantiJumlah: gantiJumlah),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              "kecil_sedang_besar" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenUkuranBarang(
+                    idJenisKategori: widget.idJenisKategori,
+                    gantiPilihan: gantiPilihan,
+                  ),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(gantiJumlah: gantiJumlah),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              "pilihan" => <Widget>[
+                  const KomponenHeader(),
+                  const SizedBox(height: 16),
+                  KomponenDropdown(
                       idJenisKategori: widget.idJenisKategori,
-                      gantiPilihan: gantiPilihan,
-                    ),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(gantiJumlah: gantiJumlah),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                "pilihan" => <Widget>[
-                    const KomponenHeader(),
-                    const SizedBox(height: 16),
-                    KomponenDropdown(
-                        idJenisKategori: widget.idJenisKategori,
-                        gantiPilihan: gantiPilihan),
-                    const SizedBox(height: 16),
-                    KomponenJumlahBarang(gantiJumlah: gantiJumlah),
-                    const SizedBox(height: 16),
-                    KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
-                  ],
-                _ => []
-              },
-            ),
+                      gantiPilihan: gantiPilihan),
+                  const SizedBox(height: 16),
+                  KomponenJumlahBarang(gantiJumlah: gantiJumlah),
+                  const SizedBox(height: 16),
+                  KomponenTombol(tambahKeKeranjang: tambahKeKeranjang),
+                ],
+              _ => []
+            },
           ),
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }
 
@@ -445,7 +442,6 @@ Future<List<Map<String, dynamic>>> kategorisasiKSB({required int id}) async {
 
 Future<List<Map<String, dynamic>>> kategorisasiPilihan(
     {required int id}) async {
-  print(id);
   final response = await supabase
       .from('kategorisasi_pilihan')
       .select()
