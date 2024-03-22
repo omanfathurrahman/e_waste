@@ -38,35 +38,35 @@ class _DetailBuangDroppoinState extends State<DetailBuangDroppoin> {
     return res;
   }
 
-  Future<void> _donasiKeDroppoin({required num droppoinId}) async {
-    final keranjangDonasi = await supabase
-        .from("keranjang_donasi")
+  Future<void> _buangKeDroppoin({required num droppoinId}) async {
+    final keranjangBuang = await supabase
+        .from("keranjang_buang")
         .select()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
-    await supabase.from("sampah_didonasikan").insert({
+    await supabase.from("sampah_dibuang").insert({
       "id_user": supabase.auth.currentUser?.id as Object,
       "droppoin_id": droppoinId,
       "pilihan_antar_jemput": 'diantar',
     });
-    final idSampahDidonasikanBaru = await supabase
-        .from("sampah_didonasikan")
+    final idSampahDibuangBaru = await supabase
+        .from("sampah_dibuang")
         .select()
         .order("id", ascending: false)
         .limit(1)
         .single();
-    for (var item in keranjangDonasi) {
-      await supabase.from("detail_sampah_didonasikan").insert([
+    for (var item in keranjangBuang) {
+      await supabase.from("detail_sampah_dibuang").insert([
         {
           "id_jenis_elektronik": item['id_jenis_elektronik'],
           "jumlah": item['jumlah'],
           "kategorisasi": item['kategorisasi'],
-          "id_sampah_didonasikan": idSampahDidonasikanBaru['id'],
+          "id_sampah_dibuang": idSampahDibuangBaru['id'],
         }
       ]);
     }
     await supabase
-        .from("keranjang_donasi")
+        .from("keranjang_buang")
         .delete()
         .eq("id_user", supabase.auth.currentUser?.id as Object);
 
@@ -109,7 +109,7 @@ class _DetailBuangDroppoinState extends State<DetailBuangDroppoin> {
             ),
             ElevatedButton(
               onPressed: () {
-                _donasiKeDroppoin(droppoinId: widget.droppoinId);
+                _buangKeDroppoin(droppoinId: widget.droppoinId);
               },
               child: const Text("Bawa ke drop poin"),
             )
@@ -141,16 +141,4 @@ class KomponenHeader extends StatelessWidget {
     );
   }
 }
-
-// Future<num> _getTotalJumlah() async {
-//   final keranjangDonasi = await supabase
-//       .from("keranjang_donasi")
-//       .select()
-//       .eq("id_user", supabase.auth.currentUser?.id as Object);
-//   num jumlahKeseluruhan = 0;
-//   for (var item in keranjangDonasi) {
-//     jumlahKeseluruhan += item['jumlah'];
-//   }
-//   return jumlahKeseluruhan;
-// }
 
