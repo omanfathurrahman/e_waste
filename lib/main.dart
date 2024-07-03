@@ -6,10 +6,10 @@ Future<void> main() async {
   // Ensure that FlutterFire is initialized
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-      url: 'https://oexltokstwraweaozqav.supabase.co',
-      anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9leGx0b2tzdHdyYXdlYW96cWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ1NjM5OTEsImV4cCI6MjAyMDEzOTk5MX0.4IB_1dfaBU6Ew-CtE4Uvs2Pmfd5SPi1Lan1oe5PSwIU');
-
+    url: 'https://rzogzczqlzdsgugljcik.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6b2d6Y3pxbHpkc2d1Z2xqY2lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAwMDQ3MTMsImV4cCI6MjAzNTU4MDcxM30.ffdgNELGID6JIc-dQVojdxijkQRmbgl0lbACJW29nhI',
+  );
   runApp(const MainApp());
 }
 

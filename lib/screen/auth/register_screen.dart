@@ -19,6 +19,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _noHpController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool validatePW(String value) {
+    String pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z]).{6,}$';
+    RegExp regExp = new RegExp(pattern);
+    return regExp.hasMatch(value);
+  }
+
   // Sign up the user
   Future<void> signUp(BuildContext context) async {
     if (_fullnameController.text.isEmpty) {
@@ -57,6 +63,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Password tidak boleh kosong'),
+        ),
+      );
+      return;
+    }
+
+    if (validatePW(_passwordController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Password harus mengandung minimal 6 karakter, huruf besar, huruf kecil, angka, dan karakter spesial'),
         ),
       );
       return;
@@ -177,19 +193,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       final pekerjaanList =
                           snapshot.data as List<Map<String, dynamic>>;
 
-                      return DropdownMenu(
-                        expandedInsets: EdgeInsets.zero,
-                        controller: _pekerjaanController,
-                        leadingIcon: const Icon(Icons.work),
-                        label: const Text('Pekerjaan'),
-                        hintText: 'Pilih pekerjaan anda',
-                        inputDecorationTheme:
-                            const InputDecorationTheme(border: null),
-                        dropdownMenuEntries: pekerjaanList.map((e) {
-                          return DropdownMenuEntry(
-                              label: e['nama'] as String,
-                              value: e['id'] as int);
-                        }).toList(),
+                      return Row(
+                        children: [
+                          Icon(Icons.work),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          DropdownMenu(
+                            // expandedInsets: EdgeInsets.zero,
+                            controller: _pekerjaanController,
+                            // leadingIcon: const Icon(Icons.work),
+                            label: const Text('Pekerjaan'),
+                            hintText: 'Pilih pekerjaan anda',
+                            inputDecorationTheme:
+                                const InputDecorationTheme(border: null),
+                            dropdownMenuEntries: pekerjaanList.map((e) {
+                              return DropdownMenuEntry(
+                                  label: e['nama'] as String,
+                                  value: e['id'] as int);
+                            }).toList(),
+                          ),
+                        ],
                       );
                     },
                   ),
@@ -215,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      signUp(context);
+                      // signUp(context);
                     },
                     child: const Text("Register"),
                   ),

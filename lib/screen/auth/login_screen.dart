@@ -2,6 +2,7 @@ import 'package:ewaste/main.dart';
 import 'package:ewaste/screen/auth/register_screen.dart';
 import 'package:ewaste/screen/main_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,24 +18,48 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Sign in the user
   void signIn(BuildContext context) async {
-    await supabase.auth.signInWithPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-    if (!context.mounted) return;
-    // Redirect to the main layout
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MainLayout(curScreenIndex: 0),
-      ),
-    );
+    try {
+      await supabase.auth.signInWithPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      if (!context.mounted) return;
+      // Redirect to the main layout
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainLayout(curScreenIndex: 0),
+        ),
+      );
+    } on AuthException catch (error) {
+      if (error.message == 'Invalid login credentials') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email atau password salah'),
+          ),
+        );
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${error.message.toString()}'),
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${error.toString()}'),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false,),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         child: Form(
@@ -42,13 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
             shrinkWrap: true,
             reverse: true,
             children: [
-              Image.asset('assets/images/logo.png', width: 130, height: 130), 
+              Image.asset('assets/images/logo.png', width: 130, height: 130),
               const Text(
                 'Login',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
-              const Text('Masuk ke akunmu',textAlign: TextAlign.center,),
+              const Text(
+                'Masuk ke akunmu',
+                textAlign: TextAlign.center,
+              ),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
